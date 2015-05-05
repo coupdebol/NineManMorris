@@ -1,0 +1,8 @@
+/Engine.class
+/Solver.class
+*.class
+*.classpath
+*.project
+*.settings
+*.prefs
+*.bin
