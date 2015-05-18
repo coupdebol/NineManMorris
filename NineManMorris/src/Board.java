@@ -12,7 +12,7 @@ import java.util.List;
 public class Board {
 	private List<Token> tokens = new ArrayList<>();
 	private BoardGraph boardGraph;
-	private boolean allTokenPlaced = false();
+	private boolean allTokenPlaced = false;
 	
 	public boolean placeToken(int[] coordinates, Token token)
 	{
