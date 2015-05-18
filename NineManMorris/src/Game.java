@@ -8,14 +8,15 @@
  */
 public class Game {
 	
-	private Player[] players;
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	private static Player white;
+	private static Player black;
+	private static Board board;
+	
+	public Game(){
+		white = new HumanPlayer(Side.WHITE);
+		black = new HumanPlayer(Side.BLACK);
+		board = new Board();
 	}
 
+	
 }
