@@ -13,6 +13,7 @@ import java.util.List;
 public abstract class Player {
 	
 	private List<Token> tokenBag = new ArrayList<>();
+	private String name;
 	
 	
 	/**
@@ -25,6 +26,14 @@ public abstract class Player {
 			Token token = new Token(side);
 			tokenBag.add(token);
 		}
+		if(side.equals(Side.WHITE))
+		{
+			this.setName("O");
+		}
+		if(side.equals(Side.BLACK))
+		{
+			this.setName("X");
+		}
 	}
 	
 	public Token getToken()
@@ -36,5 +45,18 @@ public abstract class Player {
 		{
 			return tokenBag.remove(0);
 		}
+	}
+	
+	public boolean hasToken()
+	{
+		return tokenBag.size() > 0;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

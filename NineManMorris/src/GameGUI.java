@@ -50,38 +50,68 @@ public class GameGUI {
 
 
 	private static void init2PlayerGame() {
-		Player white = game.getWhite();
-		Player black = game.getBlack();
-		Board board = game.getBoard();
+		Player white = Game.getWhite();
+		Player black = Game.getBlack();
+		Board board = Game.getBoard();
+		
 		System.out.println(board.toString());
-		String s = "";
 		
 		while(true)
 		{
 			
-			System.out.println("Player 1 starts");
-			System.out.println("Enter Token coodinates as row col");
-			try {
-				s = br.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			if(s.equalsIgnoreCase("a"))
-			{
-				System.out.println("aborting the game");
-				break;
-			}
+//			try {
+//				s = br.readLine();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			if(s.equalsIgnoreCase("a"))
+//			{
+//				System.out.println("aborting the game");
+//				break;
+//			}
 			
-			Token whiteToken = white.getToken();
-			String[] input = s.split(" ");
-			int row = Integer.parseInt(input[0]);
-			int col = Integer.parseInt(input[1]);
-			game.placeTokenAt(white, row, col);
-			System.out.println(game);
-				
+			while(white.hasToken() || black.hasToken())
+			{
+				while(!placeToken(white)){}
+				System.out.println(game);
+				while(!placeToken(black)){}
+				System.out.println(game);
+			}
+			System.out.println("all tokens have now been placed on the board");
 			
 		}
 		
+	}
+	
+	private static boolean placeToken(Player player)
+	{
+		System.out.println("Player " + player.getName());
+		System.out.print("Enter Token coodinates as row col:");
+		
+		try{
+			String input = br.readLine();
+			String[] inputs = input.split(" ");
+			if(inputs.length < 2){
+				throw new NumberFormatException();
+			}
+			int row = Integer.parseInt(inputs[0]);
+			int col = Integer.parseInt(inputs[1]);
+			game.placeTokenAt(player, row, col);			
+		} catch (IOException e) {
+			System.out.println("IOException");
+			e.printStackTrace();
+			return false;
+		} catch (NumberFormatException e) {
+			System.out.println("Enter two numbers separated by a space");
+			return false;
+		} catch (TokenAlredyPlacedException e){
+			System.out.println("There is already a token at that location");
+			return false;
+		} catch (InvalidCoordinatesException e) {
+			System.out.println("Invalid cell coordinate");
+			return false;
+		}		
+		return true;
 	}
 
 }

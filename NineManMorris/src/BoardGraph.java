@@ -116,6 +116,40 @@ public class BoardGraph {
 		b17.attachTo(b16,b18);
 		b18.attachTo(b13,b17);
 		
+		node.add(b1);
+		node.add(b2);
+		node.add(b3);
+		node.add(b4);
+		node.add(b5);
+		node.add(b6);
+		node.add(b7);
+		node.add(b8);
+		node.add(b9);
+		node.add(b10);
+		node.add(b11);
+		node.add(b12);
+		node.add(b13);
+		node.add(b14);
+		node.add(b15);
+		node.add(b16);
+		node.add(b17);
+		node.add(b18);
+		node.add(b19);
+		node.add(b20);
+		node.add(b21);
+		node.add(b22);
+		node.add(b23);
+		node.add(b24);
 		
+		
+		
+	}
+
+	public List<BoardNode> getNode() {
+		return node;
+	}
+
+	public void setNode(List<BoardNode> node) {
+		this.node = node;
 	}
 }

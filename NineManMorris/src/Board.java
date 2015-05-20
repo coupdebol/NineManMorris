@@ -11,23 +11,25 @@ import java.util.List;
  */
 public class Board {
 	private List<Token> tokens = new ArrayList<>();
-	private BoardGraph boardGraph;
-	private boolean allTokenPlaced = false;
+	private BoardGraph boardGraph = new BoardGraph();
+	
 	
 	public Board()
 	{
-		Token t = new Token(7,1, Side.WHITE);
-		Token t2 = new Token(7,2, Side.BLACK);
-		Token t3 = new Token(7,3, Side.BLACK);
-		Token t4 = new Token(6,1, Side.BLACK);
-		Token t5 = new Token(6,2, Side.WHITE);
-		Token t6 = new Token(6,3, Side.BLACK);
-		tokens.add(t);
-		tokens.add(t2);
-		tokens.add(t3);
-		tokens.add(t4);
-		tokens.add(t5);
-		tokens.add(t6);
+		
+	}
+	
+	public boolean isValidCoordinate(int row, int col)
+	{
+		for(BoardNode node:boardGraph.getNode())
+		{
+			int r = node.getRow();
+			int c = node.getCol();
+			if(c==col && r==row){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public Token getToken(int row, int col)

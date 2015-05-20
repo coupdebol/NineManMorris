@@ -18,16 +18,20 @@ public class Game {
 		board = new Board();
 	}
 	
-	public boolean placeTokenAt(Player player, int row, int col)
+	public void placeTokenAt(Player player, int row, int col) throws TokenAlredyPlacedException,InvalidCoordinatesException
 	{
+		if(!board.isValidCoordinate(row, col)){
+			throw new InvalidCoordinatesException();
+		}
 		if(board.getToken(row, col) == null)
 		{
 			Token t = player.getToken();
 			t.setCol(col);
 			t.setRow(row);
 			board.addToken(t);
+		}else{
+			throw new TokenAlredyPlacedException();
 		}
-		return false;
 	}
 	
 	public boolean moveTokenTo(Player player, int rowFrom, int colFrom, int rowTo, int colTo)
