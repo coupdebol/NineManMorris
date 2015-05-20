@@ -12,7 +12,7 @@ import java.util.List;
  */
 public abstract class Player {
 	
-	public List<Token> tokenBag = new ArrayList<>();
+	private List<Token> tokenBag = new ArrayList<>();
 	
 	
 	/**
@@ -24,6 +24,17 @@ public abstract class Player {
 		for(int i = 0 ; i < 9 ; i++){
 			Token token = new Token(side);
 			tokenBag.add(token);
+		}
+	}
+	
+	public Token getToken()
+	{
+		if (tokenBag.isEmpty())
+		{	
+			return null;
+		}else
+		{
+			return tokenBag.get(0);
 		}
 	}
 }

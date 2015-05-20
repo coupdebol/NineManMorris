@@ -97,6 +97,25 @@ public class BoardGraph {
 		BoardNode b23  = new BoardNode(7,2);
 		BoardNode b24  = new BoardNode(7,3);
 		
+		b1.attachTo(b1,b10);
+		b2.attachTo(b1,b3);
+		b3.attachTo(b2,b15);
+		b4.attachTo(b5,b11);
+		b5.attachTo(b2,b6,b8,b4);
+		b6.attachTo(b5,b14);
+		b7.attachTo(b8,b12);
+		b8.attachTo(b5,b9,b7);
+		b9.attachTo(b8,b13);
+		b10.attachTo(b1,b22);
+		b11.attachTo(b4,b12,b19,b10);
+		b12.attachTo(b7,b16);
+		b13.attachTo(b9,b18);
+		b14.attachTo(b6,b21);
+		b15.attachTo(b3,b24);
+		b16.attachTo(b12,b17);
+		b17.attachTo(b16,b18);
+		b18.attachTo(b13,b17);
+		
 		
 	}
 }

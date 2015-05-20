@@ -17,6 +17,35 @@ public class Game {
 		black = new HumanPlayer(Side.BLACK);
 		board = new Board();
 	}
+	
+	
+	public static Player getWhite() {
+		return white;
+	}
+
+	public static void setWhite(Player white) {
+		Game.white = white;
+	}
+
+	public static Player getBlack() {
+		return black;
+	}
+
+	public static void setBlack(Player black) {
+		Game.black = black;
+	}
+
+	public static Board getBoard() {
+		return board;
+	}
+
+	public static void setBoard(Board board) {
+		Game.board = board;
+	}
+
+	
+	
+	
 
 	
 }
