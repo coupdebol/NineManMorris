@@ -54,15 +54,26 @@ public class GameGUI {
 		Player black = game.getBlack();
 		Board board = game.getBoard();
 		System.out.println(board.toString());
+		String s = "";
 		
 		while(true)
 		{
+			
 			System.out.println("Player 1 starts");
-			while ((white.getToken()!=null) && (black.getToken()!=null))
+			try {
+				s = br.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if(s.equalsIgnoreCase("a"))
 			{
+				System.out.println("aborting the game");
+				break;
+			}
+			
 				Token whiteToken = white.getToken();
 				
-			}
+			
 		}
 		
 	}

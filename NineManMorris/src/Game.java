@@ -18,6 +18,15 @@ public class Game {
 		board = new Board();
 	}
 	
+	public boolean placeTokenAt(Player player, int row, int col)
+	{
+		return false;
+	}
+	
+	public boolean moveTokenTo(Player player, int rowFrom, int colFrom, int rowTo, int colTo)
+	{
+		return false;
+	}
 	
 	public static Player getWhite() {
 		return white;
