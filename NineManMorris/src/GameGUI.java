@@ -60,6 +60,7 @@ public class GameGUI {
 		{
 			
 			System.out.println("Player 1 starts");
+			System.out.println("Enter Token coodinates as row col");
 			try {
 				s = br.readLine();
 			} catch (IOException e) {
@@ -71,7 +72,12 @@ public class GameGUI {
 				break;
 			}
 			
-				Token whiteToken = white.getToken();
+			Token whiteToken = white.getToken();
+			String[] input = s.split(" ");
+			int row = Integer.parseInt(input[0]);
+			int col = Integer.parseInt(input[1]);
+			game.placeTokenAt(white, row, col);
+			System.out.println(game);
 				
 			
 		}

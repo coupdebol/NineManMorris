@@ -20,6 +20,13 @@ public class Game {
 	
 	public boolean placeTokenAt(Player player, int row, int col)
 	{
+		if(board.getToken(row, col) == null)
+		{
+			Token t = player.getToken();
+			t.setCol(col);
+			t.setRow(row);
+			board.addToken(t);
+		}
 		return false;
 	}
 	
@@ -52,6 +59,11 @@ public class Game {
 		Game.board = board;
 	}
 
+	@Override
+	public String toString()
+	{
+		return board.toString();
+	}
 	
 	
 	

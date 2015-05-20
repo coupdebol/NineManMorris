@@ -30,15 +30,24 @@ public class Board {
 		tokens.add(t6);
 	}
 	
-	public boolean placeToken(int[] coordinates, Token token)
-	{
-		//if tokens reach 18 => allTokenPlaced = true
-		return true;
-	}
-	
 	public Token getToken(int row, int col)
 	{
-		return new Token(1,1,Side.WHITE);
+		for(Token t:tokens)
+		{
+			if(t.getRow()== row)
+			{
+				if(t.getCol()== col)
+				{
+					return t;
+				}
+			}
+		}
+		return null;
+	}
+	
+	public void addToken(Token token)
+	{
+		tokens.add(token);
 	}
 	
 	public boolean moveToken(Token token, Move move)

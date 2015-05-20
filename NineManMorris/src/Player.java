@@ -34,7 +34,7 @@ public abstract class Player {
 			return null;
 		}else
 		{
-			return tokenBag.get(0);
+			return tokenBag.remove(0);
 		}
 	}
 }
