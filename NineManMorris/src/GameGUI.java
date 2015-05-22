@@ -78,11 +78,30 @@ public class GameGUI {
 				System.out.println(game);
 			}
 			System.out.println("all tokens have now been placed on the board");
+			boolean gameOver = false;
+			while(!gameOver)
+			{
+				while(!moveToken(white)){}
+				gameOver = isGameOver();
+				while(!moveToken(black)){}
+				gameOver = isGameOver();
+			}
 			
 		}
 		
 	}
 	
+	private static boolean moveToken(Player white) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	private static boolean isGameOver() {
+		return false;
+	}
+
+
 	private static boolean placeToken(Player player)
 	{
 		System.out.println("Player " + player.getName());
@@ -96,7 +115,11 @@ public class GameGUI {
 			}
 			int row = Integer.parseInt(inputs[0]);
 			int col = Integer.parseInt(inputs[1]);
-			game.placeTokenAt(player, row, col);			
+			game.placeTokenAt(player, row, col);
+			if(millCreated(player))
+			{
+				removeOpponentToken(player);
+			}
 		} catch (IOException e) {
 			System.out.println("IOException");
 			e.printStackTrace();
@@ -112,6 +135,18 @@ public class GameGUI {
 			return false;
 		}		
 		return true;
+	}
+
+
+	private static boolean millCreated(Player player) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	private static void removeOpponentToken(Player player) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
