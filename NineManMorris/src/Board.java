@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,7 +14,7 @@ import java.util.Set;
 public class Board {
 	
 	private BoardGraph boardGraph;
-	private Set<Mill> mills;
+	private List<Mill> mills;
 	
 	
 	public Board()
@@ -39,6 +40,7 @@ public class Board {
 		Mill v8 = new Mill(getToken(1,3),getToken(4,6),getToken(7,3));
 		
 		Mill[] millArray = {h1,h2,h3,h4,h5,h6,h7,h8,v1,v2,v3,v4,v5,v6,v7,v8};
+		mills = new ArrayList<>();
 		for(Mill m: millArray){
 			mills.add(m);
 		}
@@ -77,8 +79,15 @@ public class Board {
 	
 	public void addToken(Token token) throws InvalidCoordinatesException
 	{
+		//update graph
 		BoardNode node = findNode(token.getRow(),token.getCol());
 		node.setToken(token);
+		//update mills
+		List<Mill> millList = findMills(token);
+		for(Mill m:millList)
+		{
+			m.placeToken(token);
+		}
 	}
 	
 	public BoardNode findNode(int row, int col) throws InvalidCoordinatesException
@@ -105,16 +114,20 @@ public class Board {
 	
 	public boolean hasMill(Token t) {
 		boolean result = false;
-		for(Mill m: findMills(t))
+		List<Mill> theMills = findMills(t);
+		for(Mill m: theMills)
 		{
-			result = m.isFull();
+			if(m.isFull())
+			{
+				return true;
+			}
 		}
 		return result;
 	}
 	
-	private Set<Mill> findMills(Token t)
+	private List<Mill> findMills(Token t)
 	{
-		Set<Mill> results = new HashSet<>();
+		List<Mill> results = new ArrayList<>();
 		for(Mill m: mills)
 		{
 			if(m.getTokens().contains(t))
@@ -127,9 +140,10 @@ public class Board {
 	
 	public void updateMill(Token t) {
 		Side mySide = t.getSide();
-		boolean sameSide = true;
-		for(Mill m : findMills(t))
+		List<Mill> millList = findMills(t);
+		for(Mill m : millList)
 		{
+			boolean sameSide = true;
 			for(Token tok: m.getTokens())
 			{
 				if(tok.getSide() != mySide)

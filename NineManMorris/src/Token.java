@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 /**
  * 
  */
@@ -44,6 +46,33 @@ public class Token {
 
 	public void setSide(Side side) {
 		this.side = side;
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(!(o instanceof Token))
+			return false;
+		Token t = (Token) o;
+		if( t.getCol()!=this.getCol() )
+			return false;
+		if( t.getRow()!=this.getRow() )
+			return false;
+		return true;
+			
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(this.getRow(),this.getCol());
+	}
+	
+	@Override
+	public String toString()
+	{
+		
+		return this.getSide()+" row: " + this.getRow() + " col: " + this.getCol();
 	}
 
 }

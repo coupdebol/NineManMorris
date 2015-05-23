@@ -21,6 +21,24 @@ public class Mill {
 		}
 	}
 	
+	public void placeToken(Token token)
+	{
+		Set<Token> tokenSet = new HashSet<>();
+		for(Token t:tokens)
+		{
+			if(t.equals(token))
+			{
+				
+				tokenSet.add(token);
+			}
+			else
+			{
+				tokenSet.add(t);
+			}
+		}
+		tokens = tokenSet;
+	}
+	
 	public Set<Token> getTokens() {
 		return tokens;
 	}
@@ -34,5 +52,15 @@ public class Mill {
 		this.full = full;
 	}
 	
+	@Override
+	public String toString()
+	{
+		String result = "Mill at: ";
+		for(Token t: tokens)
+		{
+			result += t.getRow() + " " + t.getCol() + ",";
+		}
+		return result;
+	}
 
 }

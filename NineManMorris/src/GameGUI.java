@@ -116,7 +116,7 @@ public class GameGUI {
 			int row = Integer.parseInt(inputs[0]);
 			int col = Integer.parseInt(inputs[1]);
 			game.placeTokenAt(player, row, col);
-			if(millCreated(player,row,col))
+			if(millCreated(row,col))
 			{
 				removeOpponentToken(player);
 			}
@@ -138,13 +138,19 @@ public class GameGUI {
 	}
 
 
-	private static boolean millCreated(Player player,int row, int col) {
-		return Game.hasMill(row,col);
+	private static boolean millCreated(int row, int col) {
+		if(Game.hasMill(row,col))
+		{
+			System.out.println("There is a mill!");
+			return true;
+		}
+		return false;
 	}
 
 
 	private static void removeOpponentToken(Player player) {
-		// TODO Auto-generated method stub
+		
+		System.out.print("Enter coordinate of opponent token you wish to remove:");
 		
 	}
 
