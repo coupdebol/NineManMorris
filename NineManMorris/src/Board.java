@@ -1,5 +1,6 @@
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 
@@ -10,12 +11,35 @@ import java.util.List;
  *
  */
 public class Board {
-	private List<Token> tokens = new ArrayList<>();
+	private Set<Token> tokens = new HashSet<>();
 	private BoardGraph boardGraph = new BoardGraph();
+	private Set<Mill> mills = new HashSet<>();
 	
 	
 	public Board()
 	{
+		Mill h1 = new Mill(getToken(1,1),getToken(1,2),getToken(1,3));
+		Mill h2 = new Mill(getToken(2,1),getToken(2,2),getToken(2,3));
+		Mill h3 = new Mill(getToken(3,1),getToken(3,2),getToken(3,3));
+		Mill h4 = new Mill(getToken(4,1),getToken(4,2),getToken(4,3));
+		Mill h5 = new Mill(getToken(4,4),getToken(4,5),getToken(4,6));
+		Mill h6 = new Mill(getToken(5,1),getToken(5,2),getToken(5,3));
+		Mill h7 = new Mill(getToken(6,1),getToken(6,2),getToken(6,3));
+		Mill h8 = new Mill(getToken(7,1),getToken(7,2),getToken(7,3));
+		
+		Mill v1 = new Mill(getToken(1,1),getToken(4,1),getToken(7,1));
+		Mill v2 = new Mill(getToken(2,1),getToken(4,2),getToken(6,1));
+		Mill v3 = new Mill(getToken(3,1),getToken(4,3),getToken(5,1));
+		Mill v4 = new Mill(getToken(1,2),getToken(2,2),getToken(3,2));
+		Mill v5 = new Mill(getToken(5,2),getToken(6,2),getToken(7,2));
+		Mill v6 = new Mill(getToken(3,3),getToken(4,4),getToken(5,3));
+		Mill v7 = new Mill(getToken(2,3),getToken(4,5),getToken(6,3));
+		Mill v8 = new Mill(getToken(1,3),getToken(4,6),getToken(7,3));
+		
+		Mill[] millArray = {h1,h2,h3,h4,h5,h6,h7,h8,v1,v2,v3,v4,v5,v6,v7,v8};
+		for(Mill m: millArray){
+			mills.add(m);
+		}
 		
 	}
 	
@@ -57,8 +81,11 @@ public class Board {
 		return true;
 	}
 	
-	public boolean hasFullLine()
-	{
+	public boolean hasMill(int row, int col) {
+		for(Token t : tokens)
+		{
+			
+		}
 		return false;
 	}
 	

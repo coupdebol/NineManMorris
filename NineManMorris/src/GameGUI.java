@@ -116,7 +116,7 @@ public class GameGUI {
 			int row = Integer.parseInt(inputs[0]);
 			int col = Integer.parseInt(inputs[1]);
 			game.placeTokenAt(player, row, col);
-			if(millCreated(player))
+			if(millCreated(player,row,col))
 			{
 				removeOpponentToken(player);
 			}
@@ -138,9 +138,8 @@ public class GameGUI {
 	}
 
 
-	private static boolean millCreated(Player player) {
-		// TODO Auto-generated method stub
-		return false;
+	private static boolean millCreated(Player player,int row, int col) {
+		return Game.getBoard().hasMill(row,col);
 	}
 
 
