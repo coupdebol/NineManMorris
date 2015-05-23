@@ -139,7 +139,7 @@ public class GameGUI {
 
 
 	private static boolean millCreated(Player player,int row, int col) {
-		return Game.getBoard().hasMill(row,col);
+		return Game.hasMill(row,col);
 	}
 
 

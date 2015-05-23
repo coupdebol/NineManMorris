@@ -18,6 +18,8 @@ public class Board {
 	
 	public Board()
 	{
+		boardGraph = new BoardGraph();
+		tokens = new HashSet<>();
 		Mill h1 = new Mill(getToken(1,1),getToken(1,2),getToken(1,3));
 		Mill h2 = new Mill(getToken(2,1),getToken(2,2),getToken(2,3));
 		Mill h3 = new Mill(getToken(3,1),getToken(3,2),getToken(3,3));
@@ -76,19 +78,53 @@ public class Board {
 		tokens.add(token);
 	}
 	
-	public boolean moveToken(Token token, Move move)
+	public boolean moveToken(Token token)
 	{
 		return true;
 	}
 	
-	public boolean hasMill(int row, int col) {
-		for(Token t : tokens)
+	public boolean hasMill(Token t) {
+		boolean result = false;
+		for(Mill m: findMills(t))
 		{
-			
+			result = m.isFull();
 		}
-		return false;
+		return result;
 	}
 	
+	private Set<Mill> findMills(Token t)
+	{
+		Set<Mill> results = new HashSet<>();
+		for(Mill m: mills)
+		{
+			if(m.getTokens().contains(t))
+			{
+				results.add(m);
+			}
+		}
+		return results;
+	}
+	
+	public void updateMill(Token t) {
+		Side mySide = t.getSide();
+		boolean sameSide = true;
+		for(Mill m : findMills(t))
+		{
+			for(Token tok: m.getTokens())
+			{
+				if(tok.getSide() != mySide)
+				{
+					sameSide = false;
+				}
+			}
+			if(sameSide)
+			{
+				m.setFull(true);
+			}
+		}
+		
+	}
+
 	@Override
 	public String toString()
 	{

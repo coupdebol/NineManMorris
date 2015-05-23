@@ -29,9 +29,17 @@ public class Game {
 			t.setCol(col);
 			t.setRow(row);
 			board.addToken(t);
+			//a mill may have been created, find mill and update full is necessary
+			board.updateMill(t);
 		}else{
 			throw new TokenAlredyPlacedException();
 		}
+	}
+	
+	public static boolean hasMill(int row, int col)
+	{
+		Token t = board.getToken(row, col);
+		return board.hasMill(t);
 	}
 	
 	public boolean moveTokenTo(Player player, int rowFrom, int colFrom, int rowTo, int colTo)
