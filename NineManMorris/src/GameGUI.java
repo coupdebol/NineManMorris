@@ -142,18 +142,14 @@ public class GameGUI {
 	{
 		System.out.println("Player " + player.getName());
 		System.out.print("Enter Token coodinates as row col:");
-		
+		int row;
+		int col;
 		try {
 			int[] coordinates = obtainUserInput(2);
-			int row = coordinates[0];
-			int col = coordinates[1];
+			row = coordinates[0];
+			col = coordinates[1];
 			game.placeTokenAt(player, row, col);
 			System.out.println(game);
-			if(millCreated(row,col))
-			{
-				removeOpponentToken(player);
-				System.out.println(game);
-			}
 		} catch (TokenAlredyPlacedException e){
 			System.out.println("There is already a token at that location");
 			return false;
@@ -165,7 +161,13 @@ public class GameGUI {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
-		}	
+		}
+		
+		if(millCreated(row,col))
+		{			
+			while(!removeOpponentToken(player)){}
+			System.out.println(game);
+		}
 		return true;
 	}
 
@@ -180,13 +182,34 @@ public class GameGUI {
 	}
 
 
-	private static void removeOpponentToken(Player player) throws InvalidInputException, Exception {
-		
-		System.out.println("Enter coordinate of opponent token you wish to remove:");
-		int[] coordinates = obtainUserInput(2);
-		int row = coordinates[0];
-		int col = coordinates[1];
-		game.removeToken(row,col);
+	private static boolean removeOpponentToken(Player player) {
+
+		System.out.println("Player "+player.getName()+" ,enter coordinate of opponent token you wish to remove:");
+		int[] coordinates;
+		try {
+			coordinates = obtainUserInput(2);
+			int row = coordinates[0];
+			int col = coordinates[1];
+			Side side = player.getSide();
+			Side sideToRemove = null;
+			if(side.equals(Side.BLACK)){
+				sideToRemove = Side.WHITE;
+			}
+			if(side.equals(Side.WHITE)){
+				sideToRemove = Side.BLACK;
+			}
+			game.removeToken(row,col, sideToRemove);
+		} catch (InvalidCoordinatesException e) {
+			System.out.println("invalid coordinates");
+			return false;
+		} catch (InvalidInputException e) {
+			System.out.println("invalid input");
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 
 	}
 

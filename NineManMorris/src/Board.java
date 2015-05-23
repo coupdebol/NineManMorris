@@ -87,8 +87,6 @@ public class Board {
 		{
 			m.placeToken(emptyToken);
 		}
-		
-		updateMillFullStatus(emptyToken);
 	}
 
 	public void addToken(Token token) throws InvalidCoordinatesException
@@ -127,7 +125,6 @@ public class Board {
 	}
 	
 	public boolean hasMill(Token t) {
-		boolean result = false;
 		List<Mill> theMills = findMills(t);
 		for(Mill m: theMills)
 		{
@@ -136,7 +133,7 @@ public class Board {
 				return true;
 			}
 		}
-		return result;
+		return false;
 	}
 	
 	private List<Mill> findMills(Token t)
@@ -152,26 +149,26 @@ public class Board {
 		return results;
 	}
 	
-	public void updateMillFullStatus(Token t) {
-		Side mySide = t.getSide();
-		List<Mill> millList = findMills(t);
-		for(Mill m : millList)
-		{
-			boolean sameSide = true;
-			for(Token tok: m.getTokens())
-			{
-				if(tok.getSide() != mySide)
-				{
-					sameSide = false;
-				}
-			}
-			if(sameSide)
-			{
-				m.setFull(true);
-			}
-		}
-		
-	}
+//	public void updateMillFullStatus(Token t) {
+//		Side mySide = t.getSide();
+//		List<Mill> millList = findMills(t);
+//		for(Mill m : millList)
+//		{
+//			boolean sameSide = true;
+//			for(Token tok: m.getTokens())
+//			{
+//				if(tok.getSide() != mySide)
+//				{
+//					sameSide = false;
+//				}
+//			}
+//			if(sameSide)
+//			{
+//				m.setFull(true);
+//			}
+//		}
+//		
+//	}
 
 	@Override
 	public String toString()

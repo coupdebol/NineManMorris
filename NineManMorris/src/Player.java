@@ -14,6 +14,7 @@ public abstract class Player {
 	
 	private List<Token> tokenBag = new ArrayList<>();
 	private String name;
+	private Side side;
 	
 	
 	/**
@@ -22,6 +23,7 @@ public abstract class Player {
 	 */
 	
 	public Player(Side side){
+		this.side = side;
 		for(int i = 0 ; i < 9 ; i++){
 			Token token = new Token(side);
 			tokenBag.add(token);
@@ -59,4 +61,9 @@ public abstract class Player {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public Side getSide() {
+		return side;
+	}
+
 }

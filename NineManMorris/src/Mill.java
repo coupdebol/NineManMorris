@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -10,8 +12,7 @@ import java.util.Set;
  *
  */
 public class Mill {
-	private Set<Token> tokens = new HashSet<>();
-	private boolean full = false;
+	private List<Token> tokens = new ArrayList<>();
 	
 	public Mill(Token... token)
 	{
@@ -23,7 +24,7 @@ public class Mill {
 	
 	public void placeToken(Token token)
 	{
-		Set<Token> tokenSet = new HashSet<>();
+		List<Token> tokenSet = new ArrayList<>();
 		for(Token t:tokens)
 		{
 			if(t.equals(token))
@@ -39,17 +40,21 @@ public class Mill {
 		tokens = tokenSet;
 	}
 	
-	public Set<Token> getTokens() {
+	public List<Token> getTokens() {
 		return tokens;
 	}
-	public void setTokens(Set<Token> tokens) {
+	public void setTokens(List<Token> tokens) {
 		this.tokens = tokens;
 	}
 	public boolean isFull() {
-		return full;
-	}
-	public void setFull(boolean full) {
-		this.full = full;
+		Side s = tokens.get(0).getSide();
+		for(int i = 1 ; i < tokens.size() ; i++){
+			if(!tokens.get(i).getSide().equals(s))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	@Override
