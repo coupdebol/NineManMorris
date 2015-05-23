@@ -11,21 +11,24 @@ import java.util.List;
  */
 public class BoardNode {
 
-	private int row;
-	private int col;
+	private Token token;
 	public List<BoardNode> nodes = new ArrayList<>();	
 	
 	public BoardNode(int row, int col) {
-		this.row = row;
-		this.col = col;
+		token = new Token(row,col,Side.NONE);
 	}
 		
 	public int getRow(){
-		return row;
+		return token.getRow();
 	}
 	
 	public int getCol(){
-		return col;
+		return token.getCol();
+	}
+	
+	public Side getSide()
+	{
+		return token.getSide();
 	}
 	
 	public void attachTo(BoardNode... nodes)
@@ -33,5 +36,13 @@ public class BoardNode {
 		for(BoardNode node : nodes ){
 			this.nodes.add(node);
 		}	
+	}
+
+	public Token getToken() {
+		return token;
+	}
+
+	public void setToken(Token token) {
+		this.token = token;
 	}
 }

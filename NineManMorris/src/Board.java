@@ -11,15 +11,15 @@ import java.util.Set;
  *
  */
 public class Board {
-	private Set<Token> tokens = new HashSet<>();
-	private BoardGraph boardGraph = new BoardGraph();
-	private Set<Mill> mills = new HashSet<>();
+	
+	private BoardGraph boardGraph;
+	private Set<Mill> mills;
 	
 	
 	public Board()
 	{
 		boardGraph = new BoardGraph();
-		tokens = new HashSet<>();
+		
 		Mill h1 = new Mill(getToken(1,1),getToken(1,2),getToken(1,3));
 		Mill h2 = new Mill(getToken(2,1),getToken(2,2),getToken(2,3));
 		Mill h3 = new Mill(getToken(3,1),getToken(3,2),getToken(3,3));
@@ -60,8 +60,10 @@ public class Board {
 	
 	public Token getToken(int row, int col)
 	{
-		for(Token t:tokens)
+		List<BoardNode> nodes = boardGraph.getNode();
+		for(BoardNode node:nodes)
 		{
+			Token t = node.getToken();
 			if(t.getRow()== row)
 			{
 				if(t.getCol()== col)
@@ -70,12 +72,30 @@ public class Board {
 				}
 			}
 		}
-		return null;
+		return new Token(0,0,Side.NONE);
 	}
 	
-	public void addToken(Token token)
+	public void addToken(Token token) throws InvalidCoordinatesException
 	{
-		tokens.add(token);
+		BoardNode node = findNode(token.getRow(),token.getCol());
+		node.setToken(token);
+	}
+	
+	public BoardNode findNode(int row, int col) throws InvalidCoordinatesException
+	{
+		List<BoardNode> nodes = boardGraph.getNode();
+		for(BoardNode node:nodes)
+		{
+			Token t = node.getToken();
+			if(t.getRow()== row)
+			{
+				if(t.getCol()== col)
+				{
+					return node;
+				}
+			}
+		}
+		throw new InvalidCoordinatesException();
 	}
 	
 	public boolean moveToken(Token token)
@@ -142,8 +162,9 @@ public class Board {
 		builder.append(" |    [ ]---------[ ]---------[ ]    | \n");
 		builder.append(" |                 |                 | \n");
 		builder.append("[ ]---------------[ ]---------------[ ]\n");
-		for(Token t : tokens)
+		for(BoardNode node: boardGraph.getNode() )
 		{
+			Token t = node.getToken();
 			int idx = coordinatesToCharNumber(t.getRow(),t.getCol());
 			if(t.getSide().equals(Side.WHITE))
 				builder.replace(idx, idx+1, "O");

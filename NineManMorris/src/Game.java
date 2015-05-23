@@ -23,7 +23,7 @@ public class Game {
 		if(!board.isValidCoordinate(row, col)){
 			throw new InvalidCoordinatesException();
 		}
-		if(board.getToken(row, col) == null)
+		if(board.getToken(row, col).getSide().equals(Side.NONE))
 		{
 			Token t = player.getToken();
 			t.setCol(col);
