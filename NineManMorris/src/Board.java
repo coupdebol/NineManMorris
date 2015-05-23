@@ -77,6 +77,20 @@ public class Board {
 		return new Token(0,0,Side.NONE);
 	}
 	
+	public void removeToken(int row, int col) throws InvalidCoordinatesException {
+		BoardNode node = findNode(row,col);
+		Token emptyToken = node.getToken();
+		emptyToken.setSide(Side.NONE);
+		
+		List<Mill> millList = findMills(emptyToken);
+		for( Mill m: millList)
+		{
+			m.placeToken(emptyToken);
+		}
+		
+		updateMillFullStatus(emptyToken);
+	}
+
 	public void addToken(Token token) throws InvalidCoordinatesException
 	{
 		//update graph
@@ -138,7 +152,7 @@ public class Board {
 		return results;
 	}
 	
-	public void updateMill(Token t) {
+	public void updateMillFullStatus(Token t) {
 		Side mySide = t.getSide();
 		List<Mill> millList = findMills(t);
 		for(Mill m : millList)

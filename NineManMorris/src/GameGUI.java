@@ -73,9 +73,9 @@ public class GameGUI {
 			while(white.hasToken() || black.hasToken())
 			{
 				while(!placeToken(white)){}
-				System.out.println(game);
+				
 				while(!placeToken(black)){}
-				System.out.println(game);
+				
 			}
 			System.out.println("all tokens have now been placed on the board");
 			boolean gameOver = false;
@@ -101,39 +101,71 @@ public class GameGUI {
 		return false;
 	}
 
+	private static int[] obtainUserInput(int numOfCoordinatesSet) 
+			throws InvalidInputException,Exception
+	{
+		if( (numOfCoordinatesSet !=2) && (numOfCoordinatesSet !=4))
+		{
+			throw new Exception("invalid call to obtainUserInput");
+		}
+		int[] coordinates = new int[2*numOfCoordinatesSet];
+		try
+		{
+			String input = br.readLine();
+			String[] inputs = input.split(" ");
+			if(inputs.length < 2){
+				throw new NumberFormatException();
+			}
+			coordinates[0] = Integer.parseInt(inputs[0]);
+			coordinates[1] = Integer.parseInt(inputs[1]);
+			if(numOfCoordinatesSet==4)
+			{
+				coordinates[2] = Integer.parseInt(inputs[2]);
+				coordinates[3] = Integer.parseInt(inputs[3]);
+			}
+			
+		} catch (IOException e) {
+			System.out.println("IOException");
+			e.printStackTrace();
+			throw new InvalidInputException();
+		} catch (NumberFormatException e) {
+			System.out.println("Enter two numbers separated by a space");
+			throw new InvalidInputException();
+		} catch(ArrayIndexOutOfBoundsException e) {
+			System.out.println("Enter two sets of coordinates separated by a space");
+			throw new InvalidInputException();
+		}
+		return coordinates;
+	}
 
 	private static boolean placeToken(Player player)
 	{
 		System.out.println("Player " + player.getName());
 		System.out.print("Enter Token coodinates as row col:");
 		
-		try{
-			String input = br.readLine();
-			String[] inputs = input.split(" ");
-			if(inputs.length < 2){
-				throw new NumberFormatException();
-			}
-			int row = Integer.parseInt(inputs[0]);
-			int col = Integer.parseInt(inputs[1]);
+		try {
+			int[] coordinates = obtainUserInput(2);
+			int row = coordinates[0];
+			int col = coordinates[1];
 			game.placeTokenAt(player, row, col);
+			System.out.println(game);
 			if(millCreated(row,col))
 			{
 				removeOpponentToken(player);
+				System.out.println(game);
 			}
-		} catch (IOException e) {
-			System.out.println("IOException");
-			e.printStackTrace();
-			return false;
-		} catch (NumberFormatException e) {
-			System.out.println("Enter two numbers separated by a space");
-			return false;
 		} catch (TokenAlredyPlacedException e){
 			System.out.println("There is already a token at that location");
 			return false;
 		} catch (InvalidCoordinatesException e) {
 			System.out.println("Invalid cell coordinate");
 			return false;
-		}		
+		} catch (InvalidInputException e) {
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}	
 		return true;
 	}
 
@@ -148,10 +180,14 @@ public class GameGUI {
 	}
 
 
-	private static void removeOpponentToken(Player player) {
+	private static void removeOpponentToken(Player player) throws InvalidInputException, Exception {
 		
-		System.out.print("Enter coordinate of opponent token you wish to remove:");
-		
+		System.out.println("Enter coordinate of opponent token you wish to remove:");
+		int[] coordinates = obtainUserInput(2);
+		int row = coordinates[0];
+		int col = coordinates[1];
+		game.removeToken(row,col);
+
 	}
 
 }

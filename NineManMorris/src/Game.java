@@ -30,7 +30,7 @@ public class Game {
 			t.setRow(row);
 			board.addToken(t);
 			//a mill may have been created, find mill and update full is necessary
-			board.updateMill(t);
+			board.updateMillFullStatus(t);
 		}else{
 			throw new TokenAlredyPlacedException();
 		}
@@ -75,6 +75,15 @@ public class Game {
 	public String toString()
 	{
 		return board.toString();
+	}
+
+	public void removeToken(int row, int col) throws InvalidCoordinatesException {
+		if(!board.isValidCoordinate(row, col)){
+			throw new InvalidCoordinatesException();
+		}
+
+		board.removeToken(row,col);
+		
 	}
 	
 	
