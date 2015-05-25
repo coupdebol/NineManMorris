@@ -1,3 +1,11 @@
+package jantony.ninemanmorris.controllers;
+import jantony.ninemanmorris.exceptions.InvalidCoordinatesException;
+import jantony.ninemanmorris.exceptions.TokenAlredyPlacedException;
+import jantony.ninemanmorris.models.HumanPlayer;
+import jantony.ninemanmorris.models.Player;
+import jantony.ninemanmorris.models.Side;
+import jantony.ninemanmorris.models.Token;
+
 /**
  * 
  */

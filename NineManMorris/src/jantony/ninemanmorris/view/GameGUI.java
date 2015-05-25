@@ -1,3 +1,13 @@
+package jantony.ninemanmorris.view;
+
+import jantony.ninemanmorris.controllers.Board;
+import jantony.ninemanmorris.controllers.Game;
+import jantony.ninemanmorris.exceptions.InvalidCoordinatesException;
+import jantony.ninemanmorris.exceptions.InvalidInputException;
+import jantony.ninemanmorris.exceptions.TokenAlredyPlacedException;
+import jantony.ninemanmorris.models.Player;
+import jantony.ninemanmorris.models.Side;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

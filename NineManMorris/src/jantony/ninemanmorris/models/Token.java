@@ -1,3 +1,4 @@
+package jantony.ninemanmorris.models;
 import java.util.Objects;
 
 /**
