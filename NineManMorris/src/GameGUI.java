@@ -57,48 +57,94 @@ public class GameGUI {
 		System.out.println(board.toString());
 		
 		while(true)
-		{
-			
-//			try {
-//				s = br.readLine();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//			if(s.equalsIgnoreCase("a"))
-//			{
-//				System.out.println("aborting the game");
-//				break;
-//			}
-			
+		{			
 			while(white.hasToken() || black.hasToken())
 			{
 				while(!placeToken(white)){}
-				
 				while(!placeToken(black)){}
-				
 			}
 			System.out.println("all tokens have now been placed on the board");
 			boolean gameOver = false;
 			while(!gameOver)
 			{
 				while(!moveToken(white)){}
-				gameOver = isGameOver();
+				gameOver = Game.getWinner().equals(Side.NONE) ? false : true ;
 				while(!moveToken(black)){}
-				gameOver = isGameOver();
+				gameOver = Game.getWinner().equals(Side.NONE) ? false : true ;
 			}
 			
 		}
 		
 	}
 	
-	private static boolean moveToken(Player white) {
-		// TODO Auto-generated method stub
-		return false;
+	private static boolean placeToken(Player player)
+	{
+		System.out.println("Player " + player.getName());
+		System.out.print("Enter Token coodinates as row col:");
+		int row;
+		int col;
+		try {
+			int[] coordinates = obtainUserInput(2);
+			row = coordinates[0];
+			col = coordinates[1];
+			game.placeTokenAt(player, row, col);
+			System.out.println(game);
+		} catch (TokenAlredyPlacedException e){
+			System.out.println("There is already a token at that location");
+			return false;
+		} catch (InvalidCoordinatesException e) {
+			System.out.println("Invalid cell coordinate");
+			return false;
+		} catch (InvalidInputException e) {
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		if(millCreated(row,col))
+		{			
+			while(!removeOpponentToken(player)){}
+			System.out.println(game);
+		}
+		return true;
 	}
 
 
-	private static boolean isGameOver() {
-		return false;
+	private static boolean moveToken(Player player) {
+		
+		System.out.println("Player " + player.getName());
+		System.out.print("Enter Token coodinates as fromRow fromCol toRow toCol:");
+		int row,col,toRow,toCol;
+		
+		try {
+			int[] coordinates = obtainUserInput(4);
+			row = coordinates[0];
+			col = coordinates[1];
+			toRow = coordinates[2];
+			toCol = coordinates[3];
+			game.moveTokenTo(player, row, col, toRow, toCol);
+			System.out.println(game);
+		} catch (TokenAlredyPlacedException e){
+			System.out.println("There is already a token at that location");
+			return false;
+		} catch (InvalidCoordinatesException e) {
+			System.out.println("Invalid cell coordinate");
+			return false;
+		} catch (InvalidInputException e) {
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		
+		if(millCreated(row,col))
+		{			
+			while(!removeOpponentToken(player)){}
+			System.out.println(game);
+		}
+		return true;
 	}
 
 	private static int[] obtainUserInput(int numOfCoordinatesSet) 
@@ -137,40 +183,6 @@ public class GameGUI {
 		}
 		return coordinates;
 	}
-
-	private static boolean placeToken(Player player)
-	{
-		System.out.println("Player " + player.getName());
-		System.out.print("Enter Token coodinates as row col:");
-		int row;
-		int col;
-		try {
-			int[] coordinates = obtainUserInput(2);
-			row = coordinates[0];
-			col = coordinates[1];
-			game.placeTokenAt(player, row, col);
-			System.out.println(game);
-		} catch (TokenAlredyPlacedException e){
-			System.out.println("There is already a token at that location");
-			return false;
-		} catch (InvalidCoordinatesException e) {
-			System.out.println("Invalid cell coordinate");
-			return false;
-		} catch (InvalidInputException e) {
-			return false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-		
-		if(millCreated(row,col))
-		{			
-			while(!removeOpponentToken(player)){}
-			System.out.println(game);
-		}
-		return true;
-	}
-
 
 	private static boolean millCreated(int row, int col) {
 		if(Game.hasMill(row,col))

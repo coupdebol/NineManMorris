@@ -136,6 +136,19 @@ public class Board {
 		return false;
 	}
 	
+	public int howManyMen(Side side)
+	{
+		int num = 0;
+		for(BoardNode node: boardGraph.getNode())
+		{
+			if(node.getToken().getSide().equals(side))
+			{
+				num++;
+			}
+		}
+		return num;
+	}
+	
 	private List<Mill> findMills(Token t)
 	{
 		List<Mill> results = new ArrayList<>();

@@ -42,6 +42,7 @@ public class Game {
 	
 	public boolean moveTokenTo(Player player, int rowFrom, int colFrom, int rowTo, int colTo)
 	{
+		
 		return false;
 	}
 	
@@ -90,6 +91,18 @@ public class Game {
 		}
 		
 		
+	}
+
+	public static Side getWinner() {
+		if(board.howManyMen(Side.WHITE) == 2)
+		{
+			return Side.WHITE;
+		}
+		if(board.howManyMen(Side.BLACK)==2	)
+		{
+			return Side.BLACK;
+		}
+		return Side.NONE;
 	}
 	
 	
