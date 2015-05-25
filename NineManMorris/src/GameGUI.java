@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 /**
@@ -93,28 +92,28 @@ public class GameGUI {
 
 
 	private static void init2PlayerGame() {
-		Player playerO = Game.getWhite();
-		Player playerX = Game.getBlack();
-		Board board = Game.getBoard();
+		Player playerO = Game.getPlayerO();
+		Player playerX = Game.getPlayerX();
 		
-		System.out.println(board.toString());
+		System.out.println(game);
 		
 		while(true)
 		{			
 			while(playerO.hasToken() || playerX.hasToken())
 			{
-				if(lastSidePlayed.equals(Side.X))
+				if(lastSidePlayed.equals(Side.X) && playerO.hasToken())
 				{
 					while(!placeToken(playerO)){}
 					lastSidePlayed = Side.O;
 				}
-				if(lastSidePlayed.equals(Side.O))
+				if(lastSidePlayed.equals(Side.O) && playerX.hasToken())
 				{
 					while(!placeToken(playerX)){}
 					lastSidePlayed = Side.X;
 				}
 			}
 			System.out.println("all tokens have now been placed on the board");
+			
 			boolean gameOver = false;
 			while(!gameOver)
 			{
@@ -131,6 +130,7 @@ public class GameGUI {
 					lastSidePlayed = Side.X;
 				}
 			}
+			System.out.println("Game is over, winner is " + Game.getWinner());
 			
 		}
 		

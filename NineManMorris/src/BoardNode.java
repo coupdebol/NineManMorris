@@ -45,4 +45,21 @@ public class BoardNode {
 	public void setToken(Token token) {
 		this.token = token;
 	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o == null)
+			return false;
+		if(!(o instanceof BoardNode))
+			return false;
+		BoardNode node = (BoardNode) o;
+		if(node.token == null)
+			return false;
+		if(node.token.getRow()!=this.token.getRow())
+			return false;
+		if(node.token.getRow()!=this.token.getRow())
+			return false;
+		return true;
+	}
 }

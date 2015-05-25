@@ -1,4 +1,4 @@
-import java.util.UUID;
+
 
 /**
  * 
@@ -73,8 +73,35 @@ public class Game
 		}
 
 	}
+	
+	public void slideTokenTo(Player player, int rowFrom, int colFrom,
+			int rowTo, int colTo) throws InvalidCoordinatesException,
+			IllegalMoveException
+	{
+		// take the token from the board
+		Token fromToken = board.getToken(rowFrom, colFrom);
+		if (fromToken.getSide().equals(player.getSide()))
+		{
+			boolean validMove = board.findNode(rowFrom, colFrom).nodes
+					.contains(board.findNode(rowTo, colTo));
+			if (board.getToken(rowTo, colTo).getSide().equals(Side.NONE)
+					&& validMove)
+			{
+				board.removeToken(rowFrom, colFrom);
+				fromToken.setRow(rowTo);
+				fromToken.setCol(colTo);
+				board.addToken(fromToken);
+				lastSidePlayed = player.getSide();
+			}
 
-	public static Player getWhite()
+		} else
+		{
+			throw new IllegalMoveException();
+		}
+
+	}
+
+	public static Player getPlayerO()
 	{
 		return white;
 	}
@@ -84,7 +111,7 @@ public class Game
 		Game.white = white;
 	}
 
-	public static Player getBlack()
+	public static Player getPlayerX()
 	{
 		return black;
 	}
