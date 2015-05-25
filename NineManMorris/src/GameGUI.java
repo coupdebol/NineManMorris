@@ -1,6 +1,9 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
 
 /**
  * 
@@ -14,6 +17,22 @@ public class GameGUI {
 	
 	private static Game game = new Game();
 	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	private static Side lastSidePlayed = Side.X;
+	
+	public static class GameState
+	{
+		public int bagX;
+		public int bagO;
+		public List<Intersection> tokenX = new ArrayList<>();
+		public List<Intersection> tokenO = new ArrayList<>();;
+		
+		
+	}
+	public static class Intersection
+	{
+		public int row;
+		public int col;
+	}
 	
 	/**
 	 * @param args
@@ -21,56 +40,96 @@ public class GameGUI {
 	 */
 	public static void main(String[] args)
 	{
-		System.out.println("This is the Nine Man Morris Game");
-		while(true)
+		GameState state = new GameState();
+		try
 		{
-			System.out.println("Type one of the following:");
-			System.out.println("n - New Game");
-			System.out.println("x - Exit Game");
-			
-			
-			String s = "";
-			try {
-				s = br.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			if(s.trim().equalsIgnoreCase("x"))
+			if(args.length > 5)
 			{
-				System.out.println("Bye bye!");
-				System.exit(0);
-			}
-			if(s.trim().equalsIgnoreCase("n"))
-			{
-				System.out.println("Starting a new game with two human players!");
+				state.bagO = Integer.parseInt(args[2]);
+				state.bagX = Integer.parseInt(args[4]);
+				for(int i = 5 ; i < args.length - 2 ; i+=3)
+				{
+					Intersection intersection = new Intersection();
+					intersection.row = Integer.parseInt(args[i+1]);
+					intersection.col = Integer.parseInt(args[i+2]);
+					if(args[i].equals("O"))
+					{
+						state.tokenO.add(intersection);
+					}
+					if(args[i].equals("X"))
+					{
+						state.tokenX.add(intersection);
+					}
+				}
+			
+				lastSidePlayed = Side.valueOf(args[0]);
+				Player playerO = new HumanPlayer(Side.O);
+				playerO.setTokenBagSize(state.bagO);
+				Player playerX = new HumanPlayer(Side.X);
+				playerX.setTokenBagSize(state.bagX);
+				Game.setWhite(playerO);
+				Game.setBlack(playerX);
+				Board board = new Board();
+				for(Intersection inter : state.tokenO)
+				{
+					board.addToken(new Token(inter.row,inter.col,Side.O));
+				}
+				for(Intersection inter : state.tokenX)
+				{
+					board.addToken(new Token(inter.row,inter.col,Side.X));
+				}
+				Game.setBoard(board);
 				init2PlayerGame();
 			}
+		
+		}catch(Exception e)
+		{
+			e.printStackTrace();
 		}
+		
+		init2PlayerGame();
+		
 	}
 
 
 	private static void init2PlayerGame() {
-		Player white = Game.getWhite();
-		Player black = Game.getBlack();
+		Player playerO = Game.getWhite();
+		Player playerX = Game.getBlack();
 		Board board = Game.getBoard();
 		
 		System.out.println(board.toString());
 		
 		while(true)
 		{			
-			while(white.hasToken() || black.hasToken())
+			while(playerO.hasToken() || playerX.hasToken())
 			{
-				while(!placeToken(white)){}
-				while(!placeToken(black)){}
+				if(lastSidePlayed.equals(Side.X))
+				{
+					while(!placeToken(playerO)){}
+					lastSidePlayed = Side.O;
+				}
+				if(lastSidePlayed.equals(Side.O))
+				{
+					while(!placeToken(playerX)){}
+					lastSidePlayed = Side.X;
+				}
 			}
 			System.out.println("all tokens have now been placed on the board");
 			boolean gameOver = false;
 			while(!gameOver)
 			{
-				while(!moveToken(white)){}
-				gameOver = Game.getWinner().equals(Side.NONE) ? false : true ;
-				while(!moveToken(black)){}
-				gameOver = Game.getWinner().equals(Side.NONE) ? false : true ;
+				if(lastSidePlayed.equals(Side.X))
+				{
+					while(!moveToken(playerO)){}
+					gameOver = Game.getWinner().equals(Side.NONE) ? false : true ;
+					lastSidePlayed = Side.O;
+				}
+				if(lastSidePlayed.equals(Side.O))
+				{
+					while(!moveToken(playerX)){}
+					gameOver = Game.getWinner().equals(Side.NONE) ? false : true ;
+					lastSidePlayed = Side.X;
+				}
 			}
 			
 		}
@@ -102,10 +161,17 @@ public class GameGUI {
 			return false;
 		}
 		
-		if(millCreated(row,col))
-		{			
-			while(!removeOpponentToken(player)){}
-			System.out.println(game);
+		try
+		{
+			if(millCreated(row,col))
+			{			
+				while(!removeOpponentToken(player)){}
+				System.out.println(game);
+			}
+		} catch (InvalidCoordinatesException e)
+		{
+			System.out.println("Invalid cell coordinate");
+			return false;
 		}
 		return true;
 	}
@@ -139,10 +205,17 @@ public class GameGUI {
 		}
 		
 		
-		if(millCreated(row,col))
-		{			
-			while(!removeOpponentToken(player)){}
-			System.out.println(game);
+		try
+		{
+			if(millCreated(row,col))
+			{			
+				while(!removeOpponentToken(player)){}
+				System.out.println(game);
+			}
+		} catch (InvalidCoordinatesException e)
+		{
+			System.out.println("Invalid cell coordinate");
+			return false;
 		}
 		return true;
 	}
@@ -184,7 +257,7 @@ public class GameGUI {
 		return coordinates;
 	}
 
-	private static boolean millCreated(int row, int col) {
+	private static boolean millCreated(int row, int col) throws InvalidCoordinatesException {
 		if(Game.hasMill(row,col))
 		{
 			System.out.println("There is a mill!");
@@ -204,11 +277,11 @@ public class GameGUI {
 			int col = coordinates[1];
 			Side side = player.getSide();
 			Side sideToRemove = null;
-			if(side.equals(Side.BLACK)){
-				sideToRemove = Side.WHITE;
+			if(side.equals(Side.X)){
+				sideToRemove = Side.O;
 			}
-			if(side.equals(Side.WHITE)){
-				sideToRemove = Side.BLACK;
+			if(side.equals(Side.O)){
+				sideToRemove = Side.X;
 			}
 			game.removeToken(row,col, sideToRemove);
 		} catch (InvalidCoordinatesException e) {

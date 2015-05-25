@@ -7,5 +7,5 @@
  *
  */
 public enum Side {
-	WHITE,BLACK,NONE;
+	O,X,NONE;
 }

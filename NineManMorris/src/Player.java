@@ -28,21 +28,21 @@ public abstract class Player {
 			Token token = new Token(side);
 			tokenBag.add(token);
 		}
-		if(side.equals(Side.WHITE))
+		if(side.equals(Side.O))
 		{
 			this.setName("O");
 		}
-		if(side.equals(Side.BLACK))
+		if(side.equals(Side.X))
 		{
 			this.setName("X");
 		}
 	}
 	
-	public Token getToken()
+	public Token getToken() throws EmptyBagException
 	{
 		if (tokenBag.isEmpty())
 		{	
-			return null;
+			throw new EmptyBagException();
 		}else
 		{
 			return tokenBag.remove(0);
@@ -64,6 +64,19 @@ public abstract class Player {
 
 	public Side getSide() {
 		return side;
+	}
+	
+	public int getTokenBagSize()
+	{
+		return tokenBag.size();
+	}
+	
+	public void setTokenBagSize(int num)
+	{
+		while(getTokenBagSize()!=num)
+		{
+			tokenBag.remove(0);
+		}
 	}
 
 }

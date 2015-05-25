@@ -18,29 +18,34 @@ public class Board {
 	public Board()
 	{
 		boardGraph = new BoardGraph();
-		
-		Mill h1 = new Mill(getToken(1,1),getToken(1,2),getToken(1,3));
-		Mill h2 = new Mill(getToken(2,1),getToken(2,2),getToken(2,3));
-		Mill h3 = new Mill(getToken(3,1),getToken(3,2),getToken(3,3));
-		Mill h4 = new Mill(getToken(4,1),getToken(4,2),getToken(4,3));
-		Mill h5 = new Mill(getToken(4,4),getToken(4,5),getToken(4,6));
-		Mill h6 = new Mill(getToken(5,1),getToken(5,2),getToken(5,3));
-		Mill h7 = new Mill(getToken(6,1),getToken(6,2),getToken(6,3));
-		Mill h8 = new Mill(getToken(7,1),getToken(7,2),getToken(7,3));
-		
-		Mill v1 = new Mill(getToken(1,1),getToken(4,1),getToken(7,1));
-		Mill v2 = new Mill(getToken(2,1),getToken(4,2),getToken(6,1));
-		Mill v3 = new Mill(getToken(3,1),getToken(4,3),getToken(5,1));
-		Mill v4 = new Mill(getToken(1,2),getToken(2,2),getToken(3,2));
-		Mill v5 = new Mill(getToken(5,2),getToken(6,2),getToken(7,2));
-		Mill v6 = new Mill(getToken(3,3),getToken(4,4),getToken(5,3));
-		Mill v7 = new Mill(getToken(2,3),getToken(4,5),getToken(6,3));
-		Mill v8 = new Mill(getToken(1,3),getToken(4,6),getToken(7,3));
-		
-		Mill[] millArray = {h1,h2,h3,h4,h5,h6,h7,h8,v1,v2,v3,v4,v5,v6,v7,v8};
-		mills = new ArrayList<>();
-		for(Mill m: millArray){
-			mills.add(m);
+		try
+		{
+			Mill h1 = new Mill(getToken(1,1),getToken(1,2),getToken(1,3));
+			Mill h2 = new Mill(getToken(2,1),getToken(2,2),getToken(2,3));
+			Mill h3 = new Mill(getToken(3,1),getToken(3,2),getToken(3,3));
+			Mill h4 = new Mill(getToken(4,1),getToken(4,2),getToken(4,3));
+			Mill h5 = new Mill(getToken(4,4),getToken(4,5),getToken(4,6));
+			Mill h6 = new Mill(getToken(5,1),getToken(5,2),getToken(5,3));
+			Mill h7 = new Mill(getToken(6,1),getToken(6,2),getToken(6,3));
+			Mill h8 = new Mill(getToken(7,1),getToken(7,2),getToken(7,3));
+			
+			Mill v1 = new Mill(getToken(1,1),getToken(4,1),getToken(7,1));
+			Mill v2 = new Mill(getToken(2,1),getToken(4,2),getToken(6,1));
+			Mill v3 = new Mill(getToken(3,1),getToken(4,3),getToken(5,1));
+			Mill v4 = new Mill(getToken(1,2),getToken(2,2),getToken(3,2));
+			Mill v5 = new Mill(getToken(5,2),getToken(6,2),getToken(7,2));
+			Mill v6 = new Mill(getToken(3,3),getToken(4,4),getToken(5,3));
+			Mill v7 = new Mill(getToken(2,3),getToken(4,5),getToken(6,3));
+			Mill v8 = new Mill(getToken(1,3),getToken(4,6),getToken(7,3));
+			
+			Mill[] millArray = {h1,h2,h3,h4,h5,h6,h7,h8,v1,v2,v3,v4,v5,v6,v7,v8};
+			mills = new ArrayList<>();
+			for(Mill m: millArray){
+				mills.add(m);
+			}
+		}catch(Exception e)
+		{
+			
 		}
 		
 	}
@@ -58,7 +63,7 @@ public class Board {
 		return false;
 	}
 	
-	public Token getToken(int row, int col)
+	public Token getToken(int row, int col) throws InvalidCoordinatesException
 	{
 		List<BoardNode> nodes = boardGraph.getNode();
 		for(BoardNode node:nodes)
@@ -72,7 +77,7 @@ public class Board {
 				}
 			}
 		}
-		return new Token(0,0,Side.NONE);
+		throw new InvalidCoordinatesException();
 	}
 	
 	public void removeToken(int row, int col) throws InvalidCoordinatesException {
@@ -115,11 +120,6 @@ public class Board {
 			}
 		}
 		throw new InvalidCoordinatesException();
-	}
-	
-	public boolean moveToken(Token token)
-	{
-		return true;
 	}
 	
 	public boolean hasMill(Token t) {
@@ -202,9 +202,9 @@ public class Board {
 		{
 			Token t = node.getToken();
 			int idx = coordinatesToCharNumber(t.getRow(),t.getCol());
-			if(t.getSide().equals(Side.WHITE))
+			if(t.getSide().equals(Side.O))
 				builder.replace(idx, idx+1, "O");
-			if(t.getSide().equals(Side.BLACK))
+			if(t.getSide().equals(Side.X))
 				builder.replace(idx, idx+1, "X");
 		}
 		return builder.toString();
@@ -264,5 +264,10 @@ public class Board {
 		
 		return -1;
 		
+	}
+	
+	public BoardGraph getBoardGraph()
+	{
+		return boardGraph;
 	}
 }
