@@ -15,6 +15,7 @@ import exceptions.IllegalMoveException;
 import exceptions.InvalidCoordinatesException;
 import exceptions.InvalidInputException;
 import exceptions.TokenAlredyPlacedException;
+import exceptions.TokenBelongsToAMillException;
 
 /**
  * 
@@ -222,11 +223,15 @@ public class GameGUI {
 		} catch (IllegalMoveException e) {
 			System.out.println("Illegal Move");
 			return false;
+		} catch (TokenBelongsToAMillException e)
+		{
+			System.out.println("token belongs to a mill, cannot remove");
+			return false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
-		
+			
 		if(!(rowCheck == 0 && colCheck == 0))
 		{
 			try

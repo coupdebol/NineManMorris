@@ -8,6 +8,7 @@ import exceptions.EmptyBagException;
 import exceptions.IllegalMoveException;
 import exceptions.InvalidCoordinatesException;
 import exceptions.TokenAlredyPlacedException;
+import exceptions.TokenBelongsToAMillException;
 import exceptions.WrongSideTokenProvenanceException;
 
 
@@ -105,16 +106,23 @@ public class Game
 	}
 
 	public void removeToken(int row, int col, Side side)
-			throws InvalidCoordinatesException
+			throws InvalidCoordinatesException, TokenBelongsToAMillException
 	{
 		if (!board.isValidCoordinate(row, col))
 		{
 			throw new InvalidCoordinatesException();
 		}
-		Side tokenSide = board.findNode(row, col).getSide();
+		BoardNode node = board.findNode(row, col);
+		Side tokenSide = node.getSide();
 		if (tokenSide.equals(side))
 		{
-			board.changeSide(row, col,Side.NONE);
+			if(!board.hasMill(node))
+			{
+				board.changeSide(row, col,Side.NONE);
+			}else
+			{
+				throw new TokenBelongsToAMillException();
+			}
 		} else
 		{
 			throw new InvalidCoordinatesException();
