@@ -90,6 +90,7 @@ public class Game
 				board.removeToken(rowFrom, colFrom);
 				fromToken.setRow(rowTo);
 				fromToken.setCol(colTo);
+				fromToken.setSide(player.getSide());
 				board.addToken(fromToken);
 				lastSidePlayed = player.getSide();
 			}

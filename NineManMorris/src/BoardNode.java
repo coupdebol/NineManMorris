@@ -62,4 +62,10 @@ public class BoardNode {
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return token.getRow() + " " + token.getCol() + "->" + nodes.size() + "nodes";
+	}
 }
