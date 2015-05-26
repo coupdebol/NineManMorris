@@ -1,6 +1,10 @@
+package models;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import enums.Side;
+import exceptions.EmptyBagException;
 
 /**
  * 

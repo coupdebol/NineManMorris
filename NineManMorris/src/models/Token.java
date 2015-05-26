@@ -1,4 +1,7 @@
+package models;
 import java.util.Objects;
+
+import enums.Side;
 
 /**
  * 

@@ -1,8 +1,20 @@
+package view;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import controllers.Board;
+import controllers.Game;
+import models.HumanPlayer;
+import models.Player;
+import enums.MoveType;
+import enums.Side;
+import exceptions.IllegalMoveException;
+import exceptions.InvalidCoordinatesException;
+import exceptions.InvalidInputException;
+import exceptions.TokenAlredyPlacedException;
 
 /**
  * 

@@ -1,3 +1,6 @@
+package models;
+import enums.Side;
+
 /**
  * 
  */
