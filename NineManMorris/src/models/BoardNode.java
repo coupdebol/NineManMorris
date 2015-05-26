@@ -15,7 +15,8 @@ import enums.Side;
 public class BoardNode {
 
 	private Token token;
-	public List<BoardNode> nodes = new ArrayList<>();	
+	public List<BoardNode> nodes = new ArrayList<>();
+	public List<List<BoardNode>> mills = new ArrayList<>();	
 	
 	public BoardNode(int row, int col) {
 		token = new Token(row,col,Side.NONE);
@@ -40,6 +41,14 @@ public class BoardNode {
 			this.nodes.add(node);
 		}	
 	}
+	public void millWith(BoardNode... nodes)
+	{
+		List<BoardNode> mill = new ArrayList<>();
+		for(BoardNode node : nodes ){
+			mill.add(node);
+		}
+		this.mills.add(mill);
+	}
 
 	public void setSide(Side side)
 	{
@@ -58,7 +67,7 @@ public class BoardNode {
 			return false;
 		if(node.token.getRow()!=this.token.getRow())
 			return false;
-		if(node.token.getRow()!=this.token.getRow())
+		if(node.token.getCol()!=this.token.getCol())
 			return false;
 		return true;
 	}
@@ -68,4 +77,5 @@ public class BoardNode {
 	{
 		return token.getRow() + " " + token.getCol() + "->" + nodes.size() + "nodes";
 	}
+
 }

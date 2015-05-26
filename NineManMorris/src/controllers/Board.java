@@ -63,18 +63,21 @@ public class Board {
 	}
 	
 	public boolean hasMill(BoardNode node) {
-		List<BoardNode> graphNodes = boardGraph.getNode();
-		int idx = graphNodes.indexOf(node);
-		BoardNode thisNode = graphNodes.get(idx);
 		Side s = node.getSide();
-		for(BoardNode childNode: thisNode.nodes)
+		boolean result = true;
+		for( List<BoardNode> mill: node.mills)
 		{
-			if(!childNode.getSide().equals(s))
+			for(BoardNode childNode : mill)
 			{
-				return false;
+				if(!childNode.getSide().equals(s))
+				{
+					result = false;
+				}
 			}
+			if(result)
+				return true;
 		}
-		return true;
+		return false;
 	}
 	
 	public int howManyMen(Side side)

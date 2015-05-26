@@ -123,6 +123,55 @@ public class BoardGraph {
 		b23.attachTo(b20,b22,b24);
 		b24.attachTo(b23,b15);
 		
+		b1.millWith(b2,b3);
+		b1.millWith(b10,b22);
+		b2.millWith(b1,b3);
+		b2.millWith(b5,b8);
+		b3.millWith(b1,b2);
+		b3.millWith(b15,b24);
+		b4.millWith(b5,b6);
+		b4.millWith(b11,b19);
+		b5.millWith(b4,b6);
+		b5.millWith(b2,b8);
+		b6.millWith(b4,b5);
+		b6.millWith(b14,b21);
+		b7.millWith(b8,b9);
+		b7.millWith(b12,b16);
+		b8.millWith(b2,b5);
+		b8.millWith(b7,b9);
+		b9.millWith(b7,b8);
+		b9.millWith(b13,b18);
+		b10.millWith(b1,b22);
+		b10.millWith(b11,b12);
+		b11.millWith(b4,b19);
+		b11.millWith(b10,b12);
+		b12.millWith(b7,b16);
+		b12.millWith(b10,b11);
+		b13.millWith(b9,b18);
+		b13.millWith(b14,b15);
+		b14.millWith(b6,b21);
+		b14.millWith(b13,b15);
+		b15.millWith(b3,b24);
+		b15.millWith(b13,b14);
+		b16.millWith(b7,b12);
+		b16.millWith(b17,b18);
+		b17.millWith(b16,b18);
+		b17.millWith(b20,b23);
+		b18.millWith(b9,b13);
+		b18.millWith(b16,b17);
+		b19.millWith(b4,b11);
+		b19.millWith(b20,b21);
+		b20.millWith(b17,b23);
+		b20.millWith(b19,b21);
+		b21.millWith(b6,b14);
+		b21.millWith(b19,b20);
+		b22.millWith(b1,b10);
+		b22.millWith(b23,b24);
+		b23.millWith(b17,b20);
+		b23.millWith(b22,b24);
+		b24.millWith(b3,b15);
+		b24.millWith(b22,b23);
+		
 		node.add(b1);
 		node.add(b2);
 		node.add(b3);
@@ -159,4 +208,5 @@ public class BoardGraph {
 	public void setNode(List<BoardNode> node) {
 		this.node = node;
 	}
+
 }
