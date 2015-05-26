@@ -4,6 +4,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.plaf.SliderUI;
+
 /**
  * 
  */
@@ -96,100 +98,107 @@ public class GameGUI {
 		Player playerX = Game.getPlayerX();
 		
 		System.out.println(game);
+				
 		
-		while(true)
-		{			
-			while(playerO.hasToken() || playerX.hasToken())
+		boolean gameOver = false;
+		while(!gameOver)
+		{
+			if(lastSidePlayed.equals(Side.X))
 			{
-				if(lastSidePlayed.equals(Side.X) && playerO.hasToken())
-				{
-					while(!placeToken(playerO)){}
-					lastSidePlayed = Side.O;
-				}
-				if(lastSidePlayed.equals(Side.O) && playerX.hasToken())
-				{
-					while(!placeToken(playerX)){}
-					lastSidePlayed = Side.X;
-				}
+				while(!playTurn(playerO)){}
+				gameOver = Game.getWinner().equals(Side.NONE) ? false : true ;
+				lastSidePlayed = Side.O;
 			}
-			System.out.println("all tokens have now been placed on the board");
-			
-			boolean gameOver = false;
-			while(!gameOver)
+			if(lastSidePlayed.equals(Side.O))
 			{
-				if(lastSidePlayed.equals(Side.X))
-				{
-					while(!moveToken(playerO)){}
-					gameOver = Game.getWinner().equals(Side.NONE) ? false : true ;
-					lastSidePlayed = Side.O;
-				}
-				if(lastSidePlayed.equals(Side.O))
-				{
-					while(!moveToken(playerX)){}
-					gameOver = Game.getWinner().equals(Side.NONE) ? false : true ;
-					lastSidePlayed = Side.X;
-				}
+				while(!playTurn(playerX)){}
+				gameOver = Game.getWinner().equals(Side.NONE) ? false : true ;
+				lastSidePlayed = Side.X;
 			}
-			System.out.println("Game is over, winner is " + Game.getWinner());
-			
 		}
+		System.out.println("Game is over, winner is " + Game.getWinner());
+			
 		
 	}
 	
-	private static boolean placeToken(Player player)
+	private static boolean playTurn(Player player)
 	{
-		System.out.println("Player " + player.getName());
-		System.out.print("Enter Token coodinates as row col:");
-		int row;
-		int col;
-		try {
-			int[] coordinates = obtainUserInput(2);
-			row = coordinates[0];
-			col = coordinates[1];
-			game.placeTokenAt(player, row, col);
-			System.out.println(game);
-		} catch (TokenAlredyPlacedException e){
-			System.out.println("There is already a token at that location");
-			return false;
-		} catch (InvalidCoordinatesException e) {
-			System.out.println("Invalid cell coordinate");
-			return false;
-		} catch (InvalidInputException e) {
-			return false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-		
-		try
+		if(player.hasToken())
 		{
-			if(millCreated(row,col))
-			{			
-				while(!removeOpponentToken(player)){}
-				System.out.println(game);
+			return moveToken(player,MoveType.PLACE);
+		}else
+		{
+			int men = Game.getBoard().howManyMen(player.getSide());
+			if(men > 3)
+			{
+				return moveToken(player,MoveType.SLIDE);
 			}
-		} catch (InvalidCoordinatesException e)
-		{
-			System.out.println("Invalid cell coordinate");
-			return false;
+			if(men == 3)
+			{
+				return moveToken(player,MoveType.JUMP);
+			}
 		}
-		return true;
+		return false;
 	}
-
-
-	private static boolean moveToken(Player player) {
-		
-		System.out.println("Player " + player.getName());
-		System.out.print("Enter Token coodinates as fromRow fromCol toRow toCol:");
+	
+	private static boolean moveToken(Player player, MoveType moveType) {
 		int row,col,toRow,toCol;
+		int rowCheck = 0,colCheck = 0;
+		System.out.println("Player " + player.getName());
+		int[] coordinates;
 		
 		try {
-			int[] coordinates = obtainUserInput(4);
-			row = coordinates[0];
-			col = coordinates[1];
-			toRow = coordinates[2];
-			toCol = coordinates[3];
-			game.moveTokenTo(player, row, col, toRow, toCol);
+			switch (moveType)
+			{
+			case PLACE:
+				System.out.print("Place - Enter Token coodinates as Row Col:");
+				coordinates = obtainUserInput(2);
+				row = coordinates[0];
+				col = coordinates[1];
+				rowCheck = row;
+				colCheck = col;
+				game.placeTokenAt(player, row, col);
+				break;
+			case SLIDE:
+				System.out.print("Slide - Enter Token coodinates as fromRow fromCol toRow toCol:");
+				coordinates = obtainUserInput(4);
+				row = coordinates[0];
+				col = coordinates[1];
+				toRow = coordinates[2];
+				toCol = coordinates[3];
+				rowCheck = toRow;
+				colCheck = toCol;
+				game.slideTokenTo(player, row, col, toRow, toCol);
+				break;
+			case JUMP:
+				System.out.print("Jump - Enter Token coodinates as fromRow fromCol toRow toCol:");
+				coordinates = obtainUserInput(4);
+				row = coordinates[0];
+				col = coordinates[1];
+				toRow = coordinates[2];
+				toCol = coordinates[3];
+				rowCheck = toRow;
+				colCheck = toCol;
+				game.moveTokenTo(player, row, col, toRow, toCol);
+				break;
+			case REMOVE:
+				System.out.print("Remove - Enter Token coodinates as Row Col:");
+				coordinates = obtainUserInput(2);
+				row = coordinates[0];
+				col = coordinates[1];
+				Side side = player.getSide();
+				Side sideToRemove = null;
+				if(side.equals(Side.X)){
+					sideToRemove = Side.O;
+				}
+				if(side.equals(Side.O)){
+					sideToRemove = Side.X;
+				}
+				game.removeToken(row,col,sideToRemove);
+				break;
+			default:
+				break;
+			}
 			System.out.println(game);
 		} catch (TokenAlredyPlacedException e){
 			System.out.println("There is already a token at that location");
@@ -198,30 +207,36 @@ public class GameGUI {
 			System.out.println("Invalid cell coordinate");
 			return false;
 		} catch (InvalidInputException e) {
+			System.out.println("Invalid input");
+			return false;
+		} catch (IllegalMoveException e) {
+			System.out.println("Illegal Move");
 			return false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
 		
-		
-		try
+		if(!(rowCheck == 0 && colCheck == 0))
 		{
-			if(millCreated(row,col))
-			{			
-				while(!removeOpponentToken(player)){}
-				System.out.println(game);
+			try
+			{
+				if(millCreated(rowCheck,colCheck))
+				{			
+					while(!moveToken(player,MoveType.REMOVE)){}
+					System.out.println(game);
+				}
+			} catch (InvalidCoordinatesException e)
+			{
+				System.out.println("Invalid cell coordinate");
+				return false;
 			}
-		} catch (InvalidCoordinatesException e)
-		{
-			System.out.println("Invalid cell coordinate");
-			return false;
 		}
 		return true;
 	}
 
 	private static int[] obtainUserInput(int numOfCoordinatesSet) 
-			throws InvalidInputException,Exception
+			throws InvalidInputException, Exception
 	{
 		if( (numOfCoordinatesSet !=2) && (numOfCoordinatesSet !=4))
 		{
@@ -266,36 +281,5 @@ public class GameGUI {
 		return false;
 	}
 
-
-	private static boolean removeOpponentToken(Player player) {
-
-		System.out.println("Player "+player.getName()+" ,enter coordinate of opponent token you wish to remove:");
-		int[] coordinates;
-		try {
-			coordinates = obtainUserInput(2);
-			int row = coordinates[0];
-			int col = coordinates[1];
-			Side side = player.getSide();
-			Side sideToRemove = null;
-			if(side.equals(Side.X)){
-				sideToRemove = Side.O;
-			}
-			if(side.equals(Side.O)){
-				sideToRemove = Side.X;
-			}
-			game.removeToken(row,col, sideToRemove);
-		} catch (InvalidCoordinatesException e) {
-			System.out.println("invalid coordinates");
-			return false;
-		} catch (InvalidInputException e) {
-			System.out.println("invalid input");
-			return false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-
-	}
 
 }

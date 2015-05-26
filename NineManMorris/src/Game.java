@@ -11,15 +11,15 @@
 public class Game
 {
 
-	private static Player white;
-	private static Player black;
+	private static Player playerO;
+	private static Player playerX;
 	private static Board board;
 	private static Side lastSidePlayed;
 
 	public Game()
 	{
-		white = new HumanPlayer(Side.O);
-		black = new HumanPlayer(Side.X);
+		playerO = new HumanPlayer(Side.O);
+		playerX = new HumanPlayer(Side.X);
 		board = new Board();
 		lastSidePlayed = Side.X;
 	}
@@ -103,22 +103,22 @@ public class Game
 
 	public static Player getPlayerO()
 	{
-		return white;
+		return playerO;
 	}
 
 	public static void setWhite(Player white)
 	{
-		Game.white = white;
+		Game.playerO = white;
 	}
 
 	public static Player getPlayerX()
 	{
-		return black;
+		return playerX;
 	}
 
 	public static void setBlack(Player black)
 	{
-		Game.black = black;
+		Game.playerX = black;
 	}
 
 	public static Board getBoard()
@@ -157,13 +157,17 @@ public class Game
 
 	public static Side getWinner()
 	{
-		if (board.howManyMen(Side.O) == 2)
-		{
-			return Side.O;
+		if(!(playerO.hasToken())){
+			if (board.howManyMen(Side.O) == 2)
+			{
+				return Side.O;
+			}
 		}
-		if (board.howManyMen(Side.X) == 2)
-		{
-			return Side.X;
+		if(!(playerO.hasToken())){
+			if (board.howManyMen(Side.X) == 2)
+			{
+				return Side.X;
+			}
 		}
 		return Side.NONE;
 	}
@@ -172,10 +176,10 @@ public class Game
 	{
 		StringBuilder s = new StringBuilder();
 		s.append(lastSidePlayed + " ");
-		s.append(white.getSide()+ " ");
-		s.append(white.getTokenBagSize()+ " ");
-		s.append(black.getSide()+ " ");
-		s.append(black.getTokenBagSize()+ " ");
+		s.append(playerO.getSide()+ " ");
+		s.append(playerO.getTokenBagSize()+ " ");
+		s.append(playerX.getSide()+ " ");
+		s.append(playerX.getTokenBagSize()+ " ");
 		for(BoardNode node : board.getBoardGraph().getNode())
 		{
 			if(!node.getSide().equals(Side.NONE))
