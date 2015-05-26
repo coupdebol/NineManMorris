@@ -38,7 +38,7 @@ public abstract class Player {
 		}
 	}
 	
-	public Token getToken() throws EmptyBagException
+	public Token takeToken() throws EmptyBagException
 	{
 		if (tokenBag.isEmpty())
 		{	

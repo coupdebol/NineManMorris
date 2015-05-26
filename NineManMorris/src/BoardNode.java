@@ -38,12 +38,9 @@ public class BoardNode {
 		}	
 	}
 
-	public Token getToken() {
-		return token;
-	}
-
-	public void setToken(Token token) {
-		this.token = token;
+	public void setSide(Side side)
+	{
+		token.setSide(side);
 	}
 	
 	@Override

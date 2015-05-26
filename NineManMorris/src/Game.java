@@ -32,12 +32,10 @@ public class Game
 		{
 			throw new InvalidCoordinatesException();
 		}
-		if (board.getToken(row, col).getSide().equals(Side.NONE))
+		if (board.findNode(row, col).getSide().equals(Side.NONE))
 		{
-			Token t = player.getToken();
-			t.setCol(col);
-			t.setRow(row);
-			board.addToken(t);
+			player.takeToken();
+			board.changeSide(row, col, player.getSide());
 			lastSidePlayed = player.getSide();
 		} else
 		{
@@ -45,61 +43,76 @@ public class Game
 		}
 	}
 
-	public static boolean hasMill(int row, int col) throws InvalidCoordinatesException
-	{
-		Token t = board.getToken(row, col);
-		return board.hasMill(t);
-	}
-
-	public void moveTokenTo(Player player, int rowFrom, int colFrom, int rowTo,
-			int colTo) throws InvalidCoordinatesException, IllegalMoveException
-	{
-		// take the token from the board
-		Token fromToken = board.getToken(rowFrom, colFrom);
-		if (fromToken.getSide().equals(player.getSide()))
-		{
-			if (board.getToken(rowTo, colTo).getSide().equals(Side.NONE))
-			{
-				board.removeToken(rowFrom, colFrom);
-				fromToken.setRow(rowTo);
-				fromToken.setCol(colTo);
-				board.addToken(fromToken);
-				lastSidePlayed = player.getSide();
-			}
-
-		} else
-		{
-			throw new IllegalMoveException();
-		}
-
-	}
-	
 	public void slideTokenTo(Player player, int rowFrom, int colFrom,
 			int rowTo, int colTo) throws InvalidCoordinatesException,
 			IllegalMoveException
 	{
 		// take the token from the board
-		Token fromToken = board.getToken(rowFrom, colFrom);
-		if (fromToken.getSide().equals(player.getSide()))
+		BoardNode node = board.findNode(rowFrom, colFrom);
+		if (node.getSide().equals(player.getSide()))
 		{
 			boolean validMove = board.findNode(rowFrom, colFrom).nodes
 					.contains(board.findNode(rowTo, colTo));
-			if (board.getToken(rowTo, colTo).getSide().equals(Side.NONE)
+			if (board.findNode(rowTo, colTo).getSide().equals(Side.NONE)
 					&& validMove)
 			{
-				board.removeToken(rowFrom, colFrom);
-				fromToken.setRow(rowTo);
-				fromToken.setCol(colTo);
-				fromToken.setSide(player.getSide());
-				board.addToken(fromToken);
+				board.changeSide(rowFrom, colFrom,Side.NONE);
+				board.changeSide(rowTo,colTo,player.getSide());
 				lastSidePlayed = player.getSide();
 			}
-
+	
 		} else
 		{
 			throw new IllegalMoveException();
 		}
+	
+	}
 
+	public void moveTokenTo(Player player, int rowFrom, int colFrom, int rowTo,
+			int colTo) throws InvalidCoordinatesException, IllegalMoveException, DestinationNotEmptyException, WrongSideTokenProvenanceException
+	{
+		BoardNode nodeFrom = board.findNode(rowFrom, colFrom);
+		BoardNode nodeTo = board.findNode(rowTo, colTo);
+		if (nodeFrom.getSide().equals(player.getSide()))
+		{
+			if (nodeTo.getSide().equals(Side.NONE))
+			{
+				board.changeSide(rowFrom, colFrom, Side.NONE);
+				board.changeSide(rowTo, colTo, player.getSide());
+				lastSidePlayed = player.getSide();
+			} else
+			{
+				throw new DestinationNotEmptyException();
+			}
+	
+		} else
+		{
+			throw new WrongSideTokenProvenanceException();
+		}
+	
+	}
+
+	public void removeToken(int row, int col, Side side)
+			throws InvalidCoordinatesException
+	{
+		if (!board.isValidCoordinate(row, col))
+		{
+			throw new InvalidCoordinatesException();
+		}
+		Side tokenSide = board.findNode(row, col).getSide();
+		if (tokenSide.equals(side))
+		{
+			board.changeSide(row, col,Side.NONE);
+		} else
+		{
+			throw new InvalidCoordinatesException();
+		}
+	
+	}
+
+	public static boolean hasMill(int row, int col) throws InvalidCoordinatesException
+	{
+		return board.hasMill(board.findNode(row,col));
 	}
 
 	public static Player getPlayerO()
@@ -138,24 +151,6 @@ public class Game
 		return board.toString() + "\n----------------\n" +getGameState()+ "\n----------------\n";
 	}
 
-	public void removeToken(int row, int col, Side side)
-			throws InvalidCoordinatesException
-	{
-		if (!board.isValidCoordinate(row, col))
-		{
-			throw new InvalidCoordinatesException();
-		}
-		Side tokenSide = board.getToken(row, col).getSide();
-		if (tokenSide.equals(side))
-		{
-			board.removeToken(row, col);
-		} else
-		{
-			throw new InvalidCoordinatesException();
-		}
-
-	}
-
 	public static Side getWinner()
 	{
 		if(!(playerO.hasToken())){
@@ -185,9 +180,8 @@ public class Game
 		{
 			if(!node.getSide().equals(Side.NONE))
 			{
-				Token t = node.getToken();
-				s.append(t.getSide() + " ");
-				s.append(t.getRow() + " " + t.getCol()+ " ");
+				s.append(node.getSide() + " ");
+				s.append(node.getRow() + " " + node.getCol()+ " ");
 			}
 		}
 		return s.toString();

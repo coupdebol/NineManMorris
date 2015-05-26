@@ -71,11 +71,11 @@ public class GameGUI {
 				Board board = new Board();
 				for(Intersection inter : state.tokenO)
 				{
-					board.addToken(new Token(inter.row,inter.col,Side.O));
+					board.changeSide(inter.row,inter.col,Side.O);
 				}
 				for(Intersection inter : state.tokenX)
 				{
-					board.addToken(new Token(inter.row,inter.col,Side.X));
+					board.changeSide(inter.row,inter.col,Side.X);
 				}
 				Game.setBoard(board);
 				init2PlayerGame();
@@ -273,7 +273,7 @@ public class GameGUI {
 	private static boolean millCreated(int row, int col) throws InvalidCoordinatesException {
 		if(Game.hasMill(row,col))
 		{
-			System.out.println("There is a mill!");
+			System.out.println("There is a mill at " + row + " " + col);
 			return true;
 		}
 		return false;
