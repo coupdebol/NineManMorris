@@ -3,16 +3,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
- */
-
-/**
- * @author Julien Antony
+ * @author Julien Antony 971801x
  *
  */
 public class Engine {
