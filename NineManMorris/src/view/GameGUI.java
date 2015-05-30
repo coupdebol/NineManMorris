@@ -93,13 +93,17 @@ public class GameGUI {
 				Game.setBoard(board);
 				init2PlayerGame();
 			}
+			else
+			{
+				init2PlayerGame();
+			}
 		
 		}catch(Exception e)
 		{
 			e.printStackTrace();
 		}
 		
-		init2PlayerGame();
+		System.exit(0);
 		
 	}
 
@@ -120,11 +124,14 @@ public class GameGUI {
 				gameOver = Game.getWinner().equals(Side.NONE) ? false : true ;
 				lastSidePlayed = Side.O;
 			}
-			if(lastSidePlayed.equals(Side.O))
+			if(!gameOver)
 			{
-				while(!playTurn(playerX)){}
-				gameOver = Game.getWinner().equals(Side.NONE) ? false : true ;
-				lastSidePlayed = Side.X;
+				if(lastSidePlayed.equals(Side.O))
+				{
+					while(!playTurn(playerX)){}
+					gameOver = Game.getWinner().equals(Side.NONE) ? false : true ;
+					lastSidePlayed = Side.X;
+				}
 			}
 		}
 		System.out.println("Game is over, winner is " + Game.getWinner());
@@ -147,6 +154,10 @@ public class GameGUI {
 			if(men == 3)
 			{
 				return moveToken(player,MoveType.JUMP);
+			}
+			if(men <= 2)
+			{
+				return true;
 			}
 		}
 		return false;

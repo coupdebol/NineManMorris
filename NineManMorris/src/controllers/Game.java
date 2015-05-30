@@ -62,16 +62,20 @@ public class Game
 	{
 		// take the token from the board
 		BoardNode node = board.findNode(rowFrom, colFrom);
+		BoardNode nodeTo = board.findNode(rowTo, colTo);
 		if (node.getSide().equals(player.getSide()))
 		{
-			boolean validMove = board.findNode(rowFrom, colFrom).nodes
-					.contains(board.findNode(rowTo, colTo));
+			boolean validMove = node.nodes.contains(nodeTo);
 			if (board.findNode(rowTo, colTo).getSide().equals(Side.NONE)
 					&& validMove)
 			{
 				board.changeSide(rowFrom, colFrom,Side.NONE);
 				board.changeSide(rowTo,colTo,player.getSide());
 				lastSidePlayed = player.getSide();
+			}
+			else
+			{
+				throw new IllegalMoveException();
 			}
 	
 		} else
@@ -176,13 +180,13 @@ public class Game
 		if(!(playerO.hasToken())){
 			if (board.howManyMen(Side.O) == 2)
 			{
-				return Side.O;
+				return Side.X;
 			}
 		}
 		if(!(playerO.hasToken())){
 			if (board.howManyMen(Side.X) == 2)
 			{
-				return Side.X;
+				return Side.O;
 			}
 		}
 		return Side.NONE;
