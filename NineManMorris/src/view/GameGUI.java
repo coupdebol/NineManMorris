@@ -167,6 +167,15 @@ public class GameGUI
 
 	}
 
+	/**
+	 * processes the turn for the player passed to the method. The method
+	 * determines what type of move must be perfored base on the state of the
+	 * player (number of token in bag, nuumber of token on the board), no move
+	 * needs to be made if player has less or 2 tokens
+	 * 
+	 * @param player
+	 * @return true when the turn has been played successfully
+	 */
 	private static boolean playTurn(Player player)
 	{
 		if (player.hasToken())
@@ -191,6 +200,16 @@ public class GameGUI
 		return false;
 	}
 
+	/**
+	 * process the move base on the type of move required and return the
+	 * successful completion
+	 * 
+	 * @param player
+	 *            that is doing the move
+	 * @param moveType
+	 *            type of move required
+	 * @return true if the move is processed successfully
+	 */
 	private static boolean moveToken(Player player, MoveType moveType)
 	{
 		int row, col, toRow, toCol;
@@ -302,6 +321,19 @@ public class GameGUI
 		return true;
 	}
 
+	/**
+	 * validate input form the console and parse into a array of int for
+	 * validation against the board
+	 * 
+	 * @param numOfCoordinatesSet
+	 *            number of values to be taken from the user
+	 * @return an array of int containing the board coordinate in the
+	 *         appropriate formate
+	 * @throws InvalidInputException
+	 *             if the string formate is incorrect
+	 * @throws Exception
+	 *             if something goes wrong with reading from the console
+	 */
 	private static int[] obtainUserInput(int numOfCoordinatesSet)
 			throws InvalidInputException, Exception
 	{
@@ -309,7 +341,7 @@ public class GameGUI
 		{
 			throw new Exception("invalid call to obtainUserInput");
 		}
-		int[] coordinates = new int[2 * numOfCoordinatesSet];
+		int[] coordinates = new int[numOfCoordinatesSet];
 		try
 		{
 			String input = br.readLine();
@@ -344,6 +376,17 @@ public class GameGUI
 		return coordinates;
 	}
 
+	/**
+	 * check the board at the given location for a mill and return true when the
+	 * location belongs to a mill
+	 * 
+	 * @param row
+	 * @param col
+	 * @return true if the coordinates represent a location on the board that
+	 *         belongs to a mill
+	 * @throws InvalidCoordinatesException
+	 *             if coordinate are not valid
+	 */
 	private static boolean millCreated(int row, int col)
 			throws InvalidCoordinatesException
 	{
