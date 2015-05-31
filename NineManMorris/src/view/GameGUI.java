@@ -70,6 +70,22 @@ public class GameGUI
 	 */
 	public static void main(String[] args)
 	{
+		System.out.println("Nine Man Morris");
+		System.out.println("coordinate system is row, col:");
+		System.out.println("1,1---------------1,2---------------1,3");
+		System.out.println(" |                 |                 | ");
+		System.out.println(" |    2,1---------2,2---------2,3    | ");
+		System.out.println(" |     |           |           |     | ");
+		System.out.println(" |     |    3,1---3,2---3,3    |     | ");
+		System.out.println(" |     |     |           |     |     | ");
+		System.out.println("4,1---4,2---4,3         4,4---4,5---4,6");
+		System.out.println(" |     |     |           |     |     | ");
+		System.out.println(" |     |    5,1---5,2---5,3    |     | ");
+		System.out.println(" |     |           |           |     | ");
+		System.out.println(" |    6,1---------6,2---------6,3    | ");
+		System.out.println(" |                 |                 | ");
+		System.out.println("7,1---------------7,2---------------7,3\n\n");
+
 		GameState state = new GameState();
 		try
 		{
