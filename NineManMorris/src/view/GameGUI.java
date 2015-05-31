@@ -1,4 +1,5 @@
 package view;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,55 +26,72 @@ import exceptions.TokenBelongsToAMillException;
  * @author Debol
  *
  */
-public class GameGUI {
-	
+public class GameGUI
+{
+
 	private static Game game = new Game();
-	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	private static BufferedReader br = new BufferedReader(
+			new InputStreamReader(System.in));
 	private static Side lastSidePlayed = Side.X;
-	
+
+	/**
+	 * This object is used to parse the argument when starting a game from a
+	 * previous state
+	 *
+	 */
 	public static class GameState
 	{
 		public int bagX;
 		public int bagO;
 		public List<Intersection> tokenX = new ArrayList<>();
 		public List<Intersection> tokenO = new ArrayList<>();;
-		
-		
+
 	}
+
+	/**
+	 * Defines intersection on the board
+	 * 
+	 * @author Debol
+	 *
+	 */
 	public static class Intersection
 	{
 		public int row;
 		public int col;
 	}
-	
+
 	/**
+	 * Read the arguments and attempt to parse into a game state, the game state
+	 * tells what was the last player side, the number of token in each side,
+	 * and the side of all token on the board.
+	 * 
 	 * @param args
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static void main(String[] args)
 	{
 		GameState state = new GameState();
 		try
 		{
-			if(args.length > 5)
+			if (args.length > 5)
 			{
 				state.bagO = Integer.parseInt(args[2]);
 				state.bagX = Integer.parseInt(args[4]);
-				for(int i = 5 ; i < args.length - 2 ; i+=3)
+				for (int i = 5; i < args.length - 2; i += 3)
 				{
 					Intersection intersection = new Intersection();
-					intersection.row = Integer.parseInt(args[i+1]);
-					intersection.col = Integer.parseInt(args[i+2]);
-					if(args[i].equals("O"))
+					intersection.row = Integer.parseInt(args[i + 1]);
+					intersection.col = Integer.parseInt(args[i + 2]);
+					if (args[i].equals("O"))
 					{
 						state.tokenO.add(intersection);
 					}
-					if(args[i].equals("X"))
+					if (args[i].equals("X"))
 					{
 						state.tokenX.add(intersection);
 					}
 				}
-			
+
 				lastSidePlayed = Side.valueOf(args[0]);
 				Player playerO = new HumanPlayer(Side.O);
 				playerO.setTokenBagSize(state.bagO);
@@ -82,94 +100,106 @@ public class GameGUI {
 				Game.setWhite(playerO);
 				Game.setBlack(playerX);
 				Board board = new Board();
-				for(Intersection inter : state.tokenO)
+				for (Intersection inter : state.tokenO)
 				{
-					board.changeSide(inter.row,inter.col,Side.O);
+					board.changeSide(inter.row, inter.col, Side.O);
 				}
-				for(Intersection inter : state.tokenX)
+				for (Intersection inter : state.tokenX)
 				{
-					board.changeSide(inter.row,inter.col,Side.X);
+					board.changeSide(inter.row, inter.col, Side.X);
 				}
 				Game.setBoard(board);
 				init2PlayerGame();
-			}
-			else
+			} else
 			{
+				// no arguments, start with empty board
 				init2PlayerGame();
 			}
-		
-		}catch(Exception e)
+
+			// can't parse the arugment, no need to run the game
+		} catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out
+					.println("Something went wrong when starting the game, please restart the game with no arguments");
 		}
-		
+
+		// game is over, time to exit
 		System.exit(0);
-		
+
 	}
 
-
-	private static void init2PlayerGame() {
+	/**
+	 * Starts a new game out of the current game state, the game may have been
+	 * initialised
+	 */
+	private static void init2PlayerGame()
+	{
 		Player playerO = Game.getPlayerO();
 		Player playerX = Game.getPlayerX();
-		
+
 		System.out.println(game);
-				
-		
+
 		boolean gameOver = false;
-		while(!gameOver)
+		while (!gameOver)
 		{
-			if(lastSidePlayed.equals(Side.X))
+			if (lastSidePlayed.equals(Side.X))
 			{
-				while(!playTurn(playerO)){}
-				gameOver = Game.getWinner().equals(Side.NONE) ? false : true ;
+				while (!playTurn(playerO))
+				{
+				}
+				gameOver = Game.getWinner().equals(Side.NONE) ? false : true;
 				lastSidePlayed = Side.O;
 			}
-			if(!gameOver)
+			if (!gameOver)
 			{
-				if(lastSidePlayed.equals(Side.O))
+				if (lastSidePlayed.equals(Side.O))
 				{
-					while(!playTurn(playerX)){}
-					gameOver = Game.getWinner().equals(Side.NONE) ? false : true ;
+					while (!playTurn(playerX))
+					{
+					}
+					gameOver = Game.getWinner().equals(Side.NONE) ? false
+							: true;
 					lastSidePlayed = Side.X;
 				}
 			}
 		}
 		System.out.println("Game is over, winner is " + Game.getWinner());
-			
-		
+
 	}
-	
+
 	private static boolean playTurn(Player player)
 	{
-		if(player.hasToken())
+		if (player.hasToken())
 		{
-			return moveToken(player,MoveType.PLACE);
-		}else
+			return moveToken(player, MoveType.PLACE);
+		} else
 		{
 			int men = Game.getBoard().howManyMen(player.getSide());
-			if(men > 3)
+			if (men > 3)
 			{
-				return moveToken(player,MoveType.SLIDE);
+				return moveToken(player, MoveType.SLIDE);
 			}
-			if(men == 3)
+			if (men == 3)
 			{
-				return moveToken(player,MoveType.JUMP);
+				return moveToken(player, MoveType.JUMP);
 			}
-			if(men <= 2)
+			if (men <= 2)
 			{
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	private static boolean moveToken(Player player, MoveType moveType) {
-		int row,col,toRow,toCol;
-		int rowCheck = 0,colCheck = 0;
+
+	private static boolean moveToken(Player player, MoveType moveType)
+	{
+		int row, col, toRow, toCol;
+		int rowCheck = 0, colCheck = 0;
 		System.out.println("Player " + player.getName());
 		int[] coordinates;
-		
-		try {
+
+		try
+		{
 			switch (moveType)
 			{
 			case PLACE:
@@ -182,7 +212,8 @@ public class GameGUI {
 				game.placeTokenAt(player, row, col);
 				break;
 			case SLIDE:
-				System.out.print("Slide - Enter Token coodinates as fromRow fromCol toRow toCol:");
+				System.out
+						.print("Slide - Enter Token coodinates as fromRow fromCol toRow toCol:");
 				coordinates = obtainUserInput(4);
 				row = coordinates[0];
 				col = coordinates[1];
@@ -193,7 +224,8 @@ public class GameGUI {
 				game.slideTokenTo(player, row, col, toRow, toCol);
 				break;
 			case JUMP:
-				System.out.print("Jump - Enter Token coodinates as fromRow fromCol toRow toCol:");
+				System.out
+						.print("Jump - Enter Token coodinates as fromRow fromCol toRow toCol:");
 				coordinates = obtainUserInput(4);
 				row = coordinates[0];
 				col = coordinates[1];
@@ -210,46 +242,55 @@ public class GameGUI {
 				col = coordinates[1];
 				Side side = player.getSide();
 				Side sideToRemove = null;
-				if(side.equals(Side.X)){
+				if (side.equals(Side.X))
+				{
 					sideToRemove = Side.O;
 				}
-				if(side.equals(Side.O)){
+				if (side.equals(Side.O))
+				{
 					sideToRemove = Side.X;
 				}
-				game.removeToken(row,col,sideToRemove);
+				game.removeToken(row, col, sideToRemove);
 				break;
 			default:
 				break;
 			}
 			System.out.println(game);
-		} catch (TokenAlredyPlacedException e){
+		} catch (TokenAlredyPlacedException e)
+		{
 			System.out.println("There is already a token at that location");
 			return false;
-		} catch (InvalidCoordinatesException e) {
+		} catch (InvalidCoordinatesException e)
+		{
 			System.out.println("Invalid cell coordinate");
 			return false;
-		} catch (InvalidInputException e) {
+		} catch (InvalidInputException e)
+		{
 			System.out.println("Invalid input");
 			return false;
-		} catch (IllegalMoveException e) {
+		} catch (IllegalMoveException e)
+		{
 			System.out.println("Illegal Move");
 			return false;
 		} catch (TokenBelongsToAMillException e)
 		{
 			System.out.println("token belongs to a mill, cannot remove");
 			return false;
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 			return false;
 		}
-			
-		if(!(rowCheck == 0 && colCheck == 0))
+
+		if (!(rowCheck == 0 && colCheck == 0))
 		{
 			try
 			{
-				if(millCreated(rowCheck,colCheck))
-				{			
-					while(!moveToken(player,MoveType.REMOVE)){}
+				if (millCreated(rowCheck, colCheck))
+				{
+					while (!moveToken(player, MoveType.REMOVE))
+					{
+					}
 					System.out.println(game);
 				}
 			} catch (InvalidCoordinatesException e)
@@ -261,51 +302,57 @@ public class GameGUI {
 		return true;
 	}
 
-	private static int[] obtainUserInput(int numOfCoordinatesSet) 
+	private static int[] obtainUserInput(int numOfCoordinatesSet)
 			throws InvalidInputException, Exception
 	{
-		if( (numOfCoordinatesSet !=2) && (numOfCoordinatesSet !=4))
+		if ((numOfCoordinatesSet != 2) && (numOfCoordinatesSet != 4))
 		{
 			throw new Exception("invalid call to obtainUserInput");
 		}
-		int[] coordinates = new int[2*numOfCoordinatesSet];
+		int[] coordinates = new int[2 * numOfCoordinatesSet];
 		try
 		{
 			String input = br.readLine();
 			String[] inputs = input.split(" ");
-			if(inputs.length < 2){
+			if (inputs.length < 2)
+			{
 				throw new NumberFormatException();
 			}
 			coordinates[0] = Integer.parseInt(inputs[0]);
 			coordinates[1] = Integer.parseInt(inputs[1]);
-			if(numOfCoordinatesSet==4)
+			if (numOfCoordinatesSet == 4)
 			{
 				coordinates[2] = Integer.parseInt(inputs[2]);
 				coordinates[3] = Integer.parseInt(inputs[3]);
 			}
-			
-		} catch (IOException e) {
+
+		} catch (IOException e)
+		{
 			System.out.println("IOException");
 			e.printStackTrace();
 			throw new InvalidInputException();
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException e)
+		{
 			System.out.println("Enter two numbers separated by a space");
 			throw new InvalidInputException();
-		} catch(ArrayIndexOutOfBoundsException e) {
-			System.out.println("Enter two sets of coordinates separated by a space");
+		} catch (ArrayIndexOutOfBoundsException e)
+		{
+			System.out
+					.println("Enter two sets of coordinates separated by a space");
 			throw new InvalidInputException();
 		}
 		return coordinates;
 	}
 
-	private static boolean millCreated(int row, int col) throws InvalidCoordinatesException {
-		if(Game.hasMill(row,col))
+	private static boolean millCreated(int row, int col)
+			throws InvalidCoordinatesException
+	{
+		if (Game.hasMill(row, col))
 		{
 			System.out.println("There is a mill at " + row + " " + col);
 			return true;
 		}
 		return false;
 	}
-
 
 }
