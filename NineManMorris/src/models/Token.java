@@ -7,7 +7,7 @@ import enums.Side;
  * 
  */
 
-/**
+/** this class represent a token with its location and side
  * @author Debol
  *
  */
@@ -17,6 +17,12 @@ public class Token {
 	private int col;
 	private Side side;
 	
+	/**
+	 * Create a new token with its location and side determined
+	 * @param row
+	 * @param col
+	 * @param side
+	 */
 	public Token(int row, int col, Side side) {
 		this.col = col;
 		this.row = row;

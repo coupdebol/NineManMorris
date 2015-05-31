@@ -2,11 +2,9 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 
- */
-
-/**
+/** The board graph contains a list of all the node contains on a board. 
+ * The BoardGraph class is used for creating all the nodes and their 
+ * relations to each other ( connected nodes and nodes on the mills)
  * @author Debol
  *
  */
@@ -71,6 +69,13 @@ public class BoardGraph {
 	*/
 	
 	
+	/** 
+	 * Default constructor creates a node for each board locations, 
+	 * connects nodes together for legal slide moves from the a node to another.
+	 * Each node has the nodes to check when mill checking added. This constructor
+	 * create the standard board for nine man morris, an additional constructor could be created
+	 * for custom boards.
+	 */
 	public BoardGraph()
 	{
 		BoardNode b1  =  new BoardNode(1,1);
